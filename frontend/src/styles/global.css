@@ -7,6 +7,8 @@
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     background: #0a0a0a;
     color: #e2e8f0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   *, *::before, *::after {
     border-color: rgba(255, 255, 255, 0.06);
@@ -38,25 +40,35 @@
 
   /* ── Match bar ─────────────────────────────────────────── */
   .match-bar {
-    height: 6px;
-    border-radius: 3px;
+    height: 8px;
+    border-radius: 4px;
     background: rgba(255, 255, 255, 0.06);
     overflow: hidden;
   }
   .match-bar-fill {
     height: 100%;
-    border-radius: 3px;
+    border-radius: 4px;
     transition: width 0.3s;
   }
+
+  /* ── Fit indicator (dot) ───────────────────────────────── */
+  .fit-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .fit-high  { background: #10b981; box-shadow: 0 0 6px rgba(16, 185, 129, 0.4); }
+  .fit-med   { background: #eab308; box-shadow: 0 0 6px rgba(234, 179, 8, 0.3); }
+  .fit-low   { background: #333; }
 
   /* ── Source badges ──────────────────────────────────────── */
   .badge {
     font-size: 0.6rem;
     padding: 2px 7px;
-    border-radius: 3px;
+    border-radius: 4px;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.02em;
     text-decoration: none;
     display: inline-block;
     line-height: 1.4;
@@ -69,7 +81,7 @@
   .badge-greenhouse  { background: #24a148; color: #fff; }
   .badge-ttps        { background: #7c3aed; color: #fff; font-size: 0.55rem; }
 
-  /* ── Work mode pills (high contrast) ───────────────────── */
+  /* ── Work mode pills ───────────────────────────────────── */
   .wm-remote  { background: #065f46; color: #6ee7b7; border: 1px solid #047857; }
   .wm-hybrid  { background: #1e3a5f; color: #93c5fd; border: 1px solid #1e40af; }
   .wm-onsite  { background: #4a2600; color: #fdba74; border: 1px solid #9a3412; }
@@ -92,7 +104,7 @@
   .collapse-arrow { transition: transform 0.2s; }
   .collapse-arrow.open { transform: rotate(180deg); }
 
-  /* ── Inputs — dark theme ───────────────────────────────── */
+  /* ── Inputs ────────────────────────────────────────────── */
   .input {
     background: rgba(255, 255, 255, 0.05);
     color: #e2e8f0;
@@ -134,7 +146,6 @@
   .salary-real { color: #f97316; font-weight: 500; }
   .salary-est {
     color: #a3a3a3;
-    font-style: italic;
     font-size: 0.8rem;
     cursor: help;
   }
@@ -159,5 +170,22 @@
   }
   .view-btn:not(.active):hover {
     color: #a3a3a3;
+  }
+
+  /* ── Pagination ────────────────────────────────────────── */
+  .page-btn {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #a3a3a3;
+    transition: all 0.15s;
+  }
+  .page-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: #e2e8f0;
   }
 }

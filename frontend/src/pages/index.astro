@@ -323,18 +323,20 @@ function renderTable() {
   // Table view
   document.getElementById('jobTableBody').innerHTML = page.map(function(j) {
     var mc = j.match>=50?'#f97316':j.match>=25?'#ea580c':'#333';
-    var rc = (j.relevance||0)>=60?'text-emerald-400':(j.relevance||0)>=30?'text-yellow-500':'text-neutral-600';
+    var fitClass = (j.relevance||0)>=60?'fit-high':(j.relevance||0)>=30?'fit-med':'fit-low';
+    var fitTip = (j.relevance||0)>=60?'Strong category fit':'Partial match';
     var salHtml = salaryHtml(j);
     var ttpsB = j.ttps?'<span class="badge badge-ttps ml-1">TTPS</span>':'';
+    var srcLabel = {linkedin:'LinkedIn',indeed:'Indeed',google:'Google',jobsdb:'JobsDB',lever:'Lever',greenhouse:'Greenhouse'}[j.source]||j.source;
     return '<tr class="job-row border-b border-neutral-800/30">'
-      +'<td class="py-2.5 pr-3 text-center"><span class="text-[11px] font-mono '+rc+'">'+(j.relevance||0)+'</span></td>'
-      +'<td class="py-2.5 pr-3"><div class="flex items-center gap-2"><span class="text-[11px] text-neutral-500 w-6 text-right font-mono">'+j.match+'</span><div class="match-bar flex-1"><div class="match-bar-fill" style="width:'+j.match+'%;background:'+mc+'"></div></div></div></td>'
-      +'<td class="py-2.5 pr-3"><a href="'+(j.url||'#')+'" target="_blank" rel="noopener" class="text-neutral-200 hover:text-orange-400 font-medium text-sm transition">'+esc(j.title)+'</a>'+ttpsB+'</td>'
-      +'<td class="py-2.5 pr-3 text-neutral-400 text-sm">'+esc(j.company)+'</td>'
-      +'<td class="py-2.5 pr-3 text-sm">'+salHtml+'</td>'
-      +'<td class="py-2.5 pr-3 text-[11px] text-neutral-500">'+esc(j.seniority||'')+'</td>'
-      +'<td class="py-2.5 pr-3">'+wmPill(j.work_mode)+'</td>'
-      +'<td class="py-2.5"><span class="badge badge-'+j.source+'">'+j.source+'</span></td>'
+      +'<td class="py-3 pr-2 text-center" title="'+fitTip+'"><span class="fit-dot '+fitClass+'"></span></td>'
+      +'<td class="py-3 pr-3"><div class="flex items-center gap-2"><span class="text-xs text-neutral-400 w-7 text-right font-medium">'+j.match+'%</span><div class="match-bar flex-1"><div class="match-bar-fill" style="width:'+j.match+'%;background:'+mc+'"></div></div></div></td>'
+      +'<td class="py-3 pr-3"><a href="'+(j.url||'#')+'" target="_blank" rel="noopener" class="text-neutral-200 hover:text-orange-400 font-medium text-sm transition">'+esc(j.title)+'</a>'+ttpsB+'</td>'
+      +'<td class="py-3 pr-3 text-neutral-400 text-sm">'+esc(j.company)+'</td>'
+      +'<td class="py-3 pr-3 text-sm">'+salHtml+'</td>'
+      +'<td class="py-3 pr-3 text-xs text-neutral-500">'+esc(j.seniority||'')+'</td>'
+      +'<td class="py-3 pr-3">'+wmPill(j.work_mode)+'</td>'
+      +'<td class="py-3"><span class="badge badge-'+j.source+'">'+srcLabel+'</span></td>'
       +'</tr>';
   }).join('');
 
@@ -342,26 +344,26 @@ function renderTable() {
   document.getElementById('cardView').innerHTML = page.map(function(j) {
     var mc = j.match>=50?'#f97316':j.match>=25?'#ea580c':'#333';
     var ttpsB = j.ttps?'<span class="badge badge-ttps">TTPS</span>':'';
+    var srcLabel = {linkedin:'LinkedIn',indeed:'Indeed',google:'Google',jobsdb:'JobsDB',lever:'Lever',greenhouse:'Greenhouse'}[j.source]||j.source;
+    var fitClass = (j.relevance||0)>=60?'fit-high':(j.relevance||0)>=30?'fit-med':'fit-low';
     return '<div class="glass job-card p-4">'
-      // Row 1: Title + badges
-      +'<div class="flex items-start justify-between gap-2 mb-2">'
-      +'<a href="'+(j.url||'#')+'" target="_blank" rel="noopener" class="text-sm font-semibold text-white hover:text-orange-400 transition leading-tight flex-1 min-w-0">'+esc(j.title)+'</a>'
-      +'<div class="flex items-center gap-1 shrink-0">'+ttpsB+'</div></div>'
+      // Row 1: Title + salary
+      +'<div class="flex items-start justify-between gap-3 mb-1">'
+      +'<a href="'+(j.url||'#')+'" target="_blank" rel="noopener" class="text-sm font-semibold text-white hover:text-orange-400 transition leading-snug flex-1 min-w-0">'+esc(j.title)+'</a>'
+      +'<div class="text-right shrink-0">'+salaryHtml(j)+'</div></div>'
       // Row 2: Company
-      +'<div class="text-xs text-neutral-400 mb-3">'+esc(j.company)+'</div>'
-      // Row 3: Metadata pills
-      +'<div class="flex flex-wrap items-center gap-1.5 mb-3">'
+      +'<div class="text-xs text-neutral-400 mb-2.5">'+esc(j.company)+'</div>'
+      // Row 3: Match bar
+      +'<div class="flex items-center gap-2 mb-2.5"><span class="fit-dot '+fitClass+'"></span><div class="match-bar flex-1"><div class="match-bar-fill" style="width:'+j.match+'%;background:'+mc+'"></div></div>'
+      +'<span class="text-xs text-neutral-400 font-medium w-8 text-right">'+j.match+'%</span></div>'
+      // Row 4: Metadata pills + Apply
+      +'<div class="flex items-center justify-between">'
+      +'<div class="flex flex-wrap items-center gap-1.5">'
       +wmPill(j.work_mode)
       +(j.seniority?'<span class="inline-block px-2 py-0.5 rounded text-[10px] font-medium bg-neutral-800 text-neutral-400 border border-neutral-700/50">'+esc(j.seniority)+'</span>':'')
-      +'<span class="badge badge-'+j.source+'">'+j.source+'</span>'
-      +'</div>'
-      // Row 4: Match bar
-      +'<div class="flex items-center gap-2 mb-3"><div class="match-bar flex-1"><div class="match-bar-fill" style="width:'+j.match+'%;background:'+mc+'"></div></div>'
-      +'<span class="text-[11px] text-neutral-500 font-mono w-8 text-right">'+j.match+'%</span></div>'
-      // Row 5: Salary + Apply
-      +'<div class="flex items-center justify-between">'
-      +salaryHtml(j)
-      +(j.url?'<a href="'+esc(j.url)+'" target="_blank" rel="noopener" class="text-xs text-orange-400 hover:text-orange-300 font-semibold transition">Apply &rarr;</a>':'')
+      +ttpsB
+      +'<span class="badge badge-'+j.source+'">'+srcLabel+'</span></div>'
+      +(j.url?'<a href="'+esc(j.url)+'" target="_blank" rel="noopener" class="text-xs text-orange-400 hover:text-orange-300 font-semibold transition whitespace-nowrap">Apply &rarr;</a>':'')
       +'</div></div>';
   }).join('');
 

@@ -4,6 +4,8 @@ Real-time Hong Kong job market dashboard aggregating 1,000+ listings from 7 sour
 
 **Live:** [climbthesearches.com/hk-jobs](https://climbthesearches.com/hk-jobs/)
 
+![Dashboard Screenshot](docs/screenshot.png)
+
 ## Architecture
 
 ```

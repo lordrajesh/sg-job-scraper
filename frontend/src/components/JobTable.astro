@@ -9,10 +9,10 @@
     <table class="w-full text-sm">
       <thead>
         <tr class="text-left text-neutral-500 text-[11px] uppercase tracking-wider border-b border-neutral-700/50">
-          <th class="pb-2 pr-3 w-14 cursor-pointer select-none" data-sort="relevance" title="How closely this job title matches the selected category">
-            Fit <span class="sort-arrow text-neutral-600"></span>
+          <th class="pb-2 pr-2 w-8 cursor-pointer select-none text-center" data-sort="relevance" title="Category fit: green = strong match to selected category, yellow = partial">
+            <span class="sort-arrow text-neutral-600"></span>
           </th>
-          <th class="pb-2 pr-3 w-14 cursor-pointer select-none" data-sort="match" title="How well this job matches your skill profile (SQL, Python, Power BI, fraud, SEO)">
+          <th class="pb-2 pr-3 w-20 cursor-pointer select-none" data-sort="match" title="Skill match: how well this job aligns with your profile (SQL, Python, Power BI, fraud, SEO)">
             Match <span class="sort-arrow text-neutral-600"></span>
           </th>
           <th class="pb-2 pr-3 cursor-pointer select-none" data-sort="title">
@@ -43,11 +43,11 @@
 </div>
 
 <!-- Pagination -->
-<div class="flex items-center justify-between text-sm text-neutral-500 mb-6 px-1">
-  <span id="tableInfo" class="text-xs">0 jobs</span>
-  <div class="flex items-center gap-1">
-    <button id="prevPageBtn" class="px-3 py-1.5 rounded-md bg-neutral-800/80 hover:bg-neutral-700 text-xs transition border border-neutral-700/50">Prev</button>
-    <span id="pageInfo" class="px-2.5 text-xs text-neutral-400">1/1</span>
-    <button id="nextPageBtn" class="px-3 py-1.5 rounded-md bg-neutral-800/80 hover:bg-neutral-700 text-xs transition border border-neutral-700/50">Next</button>
+<div class="flex items-center justify-between mb-6 px-1">
+  <span id="tableInfo" class="text-xs text-neutral-500">0 jobs</span>
+  <div class="flex items-center gap-1.5">
+    <button id="prevPageBtn" class="page-btn">&larr; Prev</button>
+    <span id="pageInfo" class="px-3 text-xs text-neutral-400 font-medium">1/1</span>
+    <button id="nextPageBtn" class="page-btn">Next &rarr;</button>
   </div>
 </div>
