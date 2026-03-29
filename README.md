@@ -6,6 +6,13 @@ Real-time Hong Kong job market dashboard aggregating 1,000+ listings from 7 sour
 
 ![Dashboard Screenshot](docs/screenshot.png)
 
+<details>
+<summary>Mobile view</summary>
+
+![Mobile Screenshot](docs/screenshot-mobile.png)
+
+</details>
+
 ## Architecture
 
 ```

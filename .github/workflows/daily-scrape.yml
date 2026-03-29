@@ -55,25 +55,47 @@ jobs:
         working-directory: ./frontend
         run: npm run build
 
-      - name: Deploy to Hostinger via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USER }}
-          password: ${{ secrets.FTP_PASS }}
-          local-dir: ./frontend/dist/
-          server-dir: /hk-jobs/
-          protocol: ftps
+      - name: Deploy Astro build via FTPS
+        env:
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASS: ${{ secrets.FTP_PASS }}
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+        run: |
+          count=0
+          failed=0
+          find ./frontend/dist/ -type f | while read f; do
+            remote_path="/hk-jobs/${f#./frontend/dist/}"
+            remote_dir=$(dirname "$remote_path")
+            curl --ssl-reqd --insecure \
+              --ftp-create-dirs \
+              -T "$f" \
+              "ftp://$FTP_HOST$remote_path" \
+              --user "$FTP_USER:$FTP_PASS" \
+              --connect-timeout 30 \
+              --max-time 120 \
+              --retry 2 \
+              -s || echo "FAILED: $remote_path"
+          done
+          echo "Done — Astro build deployed"
 
-      - name: Upload counter.php
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USER }}
-          password: ${{ secrets.FTP_PASS }}
-          local-dir: ./frontend/public/
-          server-dir: /hk-jobs/
-          exclude: |
-            data/**
-            .htaccess
-          protocol: ftps
+      - name: Upload counter.php via FTPS
+        env:
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASS: ${{ secrets.FTP_PASS }}
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+        run: |
+          for f in ./frontend/public/*; do
+            [ -d "$f" ] && continue
+            fname=$(basename "$f")
+            [[ "$fname" == ".htaccess" ]] && continue
+            curl --ssl-reqd --insecure \
+              -T "$f" \
+              "ftp://$FTP_HOST/hk-jobs/$fname" \
+              --user "$FTP_USER:$FTP_PASS" \
+              --connect-timeout 30 \
+              --max-time 60 \
+              --retry 2 \
+              -s
+            echo "Uploaded $fname"
+          done
+          echo "Done — public files deployed"

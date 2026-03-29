@@ -102,6 +102,14 @@ cd frontend && npm run dev                  # local: http://localhost:4321/hk-jo
 cd frontend && npm run build                # production build → dist/
 ```
 
+## FTP deploy — critical notes
+- Hostinger uses **explicit FTPS** (AUTH TLS on port 21), NOT implicit FTPS (port 990)
+- **NEVER use `ftps://`** — it attempts implicit FTPS and will fail silently
+- **NEVER use `lftp`** — it does not work with Hostinger regardless of settings
+- **NEVER use `SamKirkland/FTP-Deploy-Action`** — intermittent timeouts due to no keepalive
+- **ALWAYS use `curl --ssl-reqd --insecure`** with `ftp://` — this is the only method proven to work
+- Use `--ftp-create-dirs` when uploading Astro build (nested directory structure)
+
 ## Credentials & Secrets Needed
 All credentials stored in `.env` (gitignored) and GitHub Secrets:
 - `FTP_HOST` — Hostinger FTP server IP
