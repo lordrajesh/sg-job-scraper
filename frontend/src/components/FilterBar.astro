@@ -1,50 +1,58 @@
 ---
-// Sticky filter bar — clear labels, view toggle, all sources
+// Sticky filter bar — responsive: stacks cleanly on mobile
 ---
 
 <div class="filter-bar py-3 px-4 mb-3">
-  <div class="max-w-6xl mx-auto flex flex-wrap gap-2 items-center">
-    <input type="text" id="searchInput" placeholder="Filter by title or company..."
-      class="input flex-1 min-w-[160px]" title="Search by job title or company name" />
-    <select id="seniorityFilter" class="input w-auto" title="Filter by seniority level detected from job title">
-      <option value="">All Levels</option>
-      <option value="Junior">Junior</option>
-      <option value="Mid">Mid</option>
-      <option value="Senior">Senior</option>
-      <option value="Manager">Manager</option>
-      <option value="Director+">Director+</option>
-    </select>
-    <select id="workModeFilter" class="input w-auto" title="Filter by work arrangement: Remote, Hybrid, or On-site">
-      <option value="">All Modes</option>
-      <option value="Remote">Remote</option>
-      <option value="Hybrid">Hybrid</option>
-      <option value="On-site">On-site</option>
-    </select>
-    <select id="sourceFilter" class="input w-auto" title="Filter by job board where the listing was found">
-      <option value="">All Sources</option>
-      <option value="linkedin">LinkedIn</option>
-      <option value="indeed">Indeed</option>
-      <option value="google">Google</option>
-      <option value="jobsdb">JobsDB</option>
-      <option value="lever">Lever</option>
-      <option value="greenhouse">Greenhouse</option>
-    </select>
-    <label class="flex items-center gap-1.5 text-xs text-neutral-400 cursor-pointer select-none whitespace-nowrap">
-      <input type="checkbox" id="ttpsFilter" class="accent-purple-500 w-3.5 h-3.5" />
-      <span title="Show only jobs from companies known to sponsor or welcome international hires">TTPS only</span>
-    </label>
-    <div class="flex items-center gap-1 ml-auto">
-      <button id="viewTable" class="view-btn active" title="Table view">
-        <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
-      </button>
-      <button id="viewCards" class="view-btn" title="Card view">
-        <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"></path></svg>
-      </button>
-      <button id="downloadExcelBtn"
-        class="view-btn flex items-center gap-1 text-emerald-500 hover:text-emerald-400" title="Export to Excel">
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-        XLSX
-      </button>
+  <div class="max-w-6xl mx-auto">
+    <!-- Search input (always full width on mobile) -->
+    <div class="flex gap-2 mb-2 sm:mb-0 sm:hidden">
+      <input type="text" id="searchInput" placeholder="Filter by title or company..."
+        class="input flex-1" title="Search by job title or company name" />
+    </div>
+    <!-- Desktop: all in one row -->
+    <div class="flex flex-wrap gap-2 items-center">
+      <input type="text" id="searchInputDesktop" placeholder="Filter by title or company..."
+        class="input flex-1 min-w-[160px] hidden sm:block" title="Search by job title or company name" />
+      <select id="seniorityFilter" class="input text-xs sm:text-sm w-[calc(50%-4px)] sm:w-auto" title="Filter by seniority level">
+        <option value="">All Levels</option>
+        <option value="Junior">Junior</option>
+        <option value="Mid">Mid</option>
+        <option value="Senior">Senior</option>
+        <option value="Manager">Manager</option>
+        <option value="Director+">Director+</option>
+      </select>
+      <select id="workModeFilter" class="input text-xs sm:text-sm w-[calc(50%-4px)] sm:w-auto" title="Filter by work arrangement">
+        <option value="">All Modes</option>
+        <option value="Remote">Remote</option>
+        <option value="Hybrid">Hybrid</option>
+        <option value="On-site">On-site</option>
+      </select>
+      <select id="sourceFilter" class="input text-xs sm:text-sm w-[calc(50%-4px)] sm:w-auto" title="Filter by job board source">
+        <option value="">All Sources</option>
+        <option value="linkedin">LinkedIn</option>
+        <option value="indeed">Indeed</option>
+        <option value="google">Google</option>
+        <option value="jobsdb">JobsDB</option>
+        <option value="lever">Lever</option>
+        <option value="greenhouse">Greenhouse</option>
+      </select>
+      <label class="flex items-center gap-1.5 text-xs text-neutral-400 cursor-pointer select-none whitespace-nowrap w-[calc(50%-4px)] sm:w-auto">
+        <input type="checkbox" id="ttpsFilter" class="accent-purple-500 w-3.5 h-3.5" />
+        <span title="Show only TTPS-friendly companies">TTPS only</span>
+      </label>
+      <div class="hidden sm:flex items-center gap-1 ml-auto">
+        <button id="viewTable" class="view-btn active" title="Table view">
+          <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+        </button>
+        <button id="viewCards" class="view-btn" title="Card view">
+          <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"></path></svg>
+        </button>
+        <button id="downloadExcelBtn"
+          class="view-btn flex items-center gap-1 text-emerald-500 hover:text-emerald-400" title="Export to Excel">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          XLSX
+        </button>
+      </div>
     </div>
   </div>
 </div>

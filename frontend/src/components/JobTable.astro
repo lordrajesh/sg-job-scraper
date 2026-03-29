@@ -1,18 +1,18 @@
 ---
-// Job listings: table view (default) + card view (toggleable)
-// Both views use the same data, just different layouts
+// Job listings: table on desktop, cards on mobile
+// View toggle only visible on desktop (mobile always shows cards)
 ---
 
-<!-- Table view -->
-<div id="tableView" class="glass p-4 mb-3">
+<!-- Table view (desktop only) -->
+<div id="tableView" class="hidden md:block glass p-4 mb-3">
   <div class="overflow-x-auto">
     <table class="w-full text-sm">
       <thead>
         <tr class="text-left text-neutral-500 text-[11px] uppercase tracking-wider border-b border-neutral-700/50">
-          <th class="pb-2 pr-2 w-8 cursor-pointer select-none text-center" data-sort="relevance" title="Category fit: green = strong match to selected category, yellow = partial">
+          <th class="pb-2 pr-2 w-8 cursor-pointer select-none text-center" data-sort="relevance" title="Category fit: green = strong match, yellow = partial">
             <span class="sort-arrow text-neutral-600"></span>
           </th>
-          <th class="pb-2 pr-3 w-20 cursor-pointer select-none" data-sort="match" title="Skill match: how well this job aligns with your profile (SQL, Python, Power BI, fraud, SEO)">
+          <th class="pb-2 pr-3 w-20 cursor-pointer select-none" data-sort="match" title="Skill match: alignment with your profile">
             Match <span class="sort-arrow text-neutral-600"></span>
           </th>
           <th class="pb-2 pr-3 cursor-pointer select-none" data-sort="title">
@@ -21,16 +21,16 @@
           <th class="pb-2 pr-3 cursor-pointer select-none" data-sort="company">
             Company <span class="sort-arrow text-neutral-600"></span>
           </th>
-          <th class="pb-2 pr-3 w-32 cursor-pointer select-none" data-sort="salary_num" title="Estimated monthly salary in HKD based on seniority, company tier, and role type">
+          <th class="pb-2 pr-3 w-32 cursor-pointer select-none" data-sort="salary_num" title="Estimated monthly salary in HKD">
             Salary <span class="sort-arrow text-neutral-600"></span>
           </th>
-          <th class="pb-2 pr-3 w-16 cursor-pointer select-none" data-sort="seniority" title="Seniority level detected from job title">
+          <th class="pb-2 pr-3 w-16 cursor-pointer select-none" data-sort="seniority" title="Seniority level from job title">
             Level <span class="sort-arrow text-neutral-600"></span>
           </th>
-          <th class="pb-2 pr-3 w-20 cursor-pointer select-none" data-sort="work_mode" title="Work arrangement: Remote, Hybrid, or On-site">
+          <th class="pb-2 pr-3 w-20 cursor-pointer select-none" data-sort="work_mode" title="Remote, Hybrid, or On-site">
             Mode <span class="sort-arrow text-neutral-600"></span>
           </th>
-          <th class="pb-2 w-20" title="Job board source where this listing was found">Source</th>
+          <th class="pb-2 w-20" title="Job board source">Source</th>
         </tr>
       </thead>
       <tbody id="jobTableBody"></tbody>
@@ -38,8 +38,8 @@
   </div>
 </div>
 
-<!-- Card view (hidden by default) -->
-<div id="cardView" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-3">
+<!-- Card view (always on mobile, toggleable on desktop) -->
+<div id="cardView" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 mb-3 md:hidden">
 </div>
 
 <!-- Pagination -->

@@ -289,7 +289,9 @@ function renderCharts(salBrackets) {
 // TABLE
 // ==================================================================
 function applyFilters() {
-  var q = document.getElementById('searchInput').value.toLowerCase();
+  var mobileSearch = document.getElementById('searchInput');
+  var desktopSearch = document.getElementById('searchInputDesktop');
+  var q = (mobileSearch && mobileSearch.offsetParent !== null ? mobileSearch.value : desktopSearch ? desktopSearch.value : '').toLowerCase();
   var sen = document.getElementById('seniorityFilter').value;
   var wm = document.getElementById('workModeFilter').value;
   var src = document.getElementById('sourceFilter').value;
@@ -367,9 +369,16 @@ function renderTable() {
       +'</div></div>';
   }).join('');
 
-  // Show correct view
-  document.getElementById('tableView').style.display = VIEW_MODE==='table'?'':'none';
-  document.getElementById('cardView').style.display = VIEW_MODE==='cards'?'':'none';
+  // Show correct view — mobile always shows cards via CSS (md:hidden / hidden md:block)
+  // View toggle only affects desktop
+  var isMobile = window.innerWidth < 768;
+  if (isMobile) {
+    document.getElementById('cardView').style.display = '';
+    document.getElementById('tableView').style.display = 'none';
+  } else {
+    document.getElementById('tableView').style.display = VIEW_MODE==='table'?'':'none';
+    document.getElementById('cardView').style.display = VIEW_MODE==='cards'?'':'none';
+  }
 
   var showing = FILTERED.length>0?(start+1)+'-'+Math.min(start+PER_PAGE,FILTERED.length):'0';
   document.getElementById('tableInfo').textContent = showing+' of '+FILTERED.length+' jobs';
@@ -430,6 +439,8 @@ function downloadExcel() {
 // ==================================================================
 document.getElementById('searchBtn').addEventListener('click',search);
 document.getElementById('searchInput').addEventListener('input',function(){PAGE=1;applyFilters();});
+var dSearch = document.getElementById('searchInputDesktop');
+if (dSearch) dSearch.addEventListener('input',function(){PAGE=1;applyFilters();});
 document.getElementById('seniorityFilter').addEventListener('change',function(){PAGE=1;applyFilters();});
 document.getElementById('workModeFilter').addEventListener('change',function(){PAGE=1;applyFilters();});
 document.getElementById('sourceFilter').addEventListener('change',function(){PAGE=1;applyFilters();});
