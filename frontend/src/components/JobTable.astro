@@ -1,0 +1,53 @@
+---
+// Job listings: table view (default) + card view (toggleable)
+// Both views use the same data, just different layouts
+---
+
+<!-- Table view -->
+<div id="tableView" class="glass p-4 mb-3">
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-neutral-500 text-[11px] uppercase tracking-wider border-b border-neutral-700/50">
+          <th class="pb-2 pr-3 w-14 cursor-pointer select-none" data-sort="relevance" title="How closely this job title matches the selected category">
+            Fit <span class="sort-arrow text-neutral-600"></span>
+          </th>
+          <th class="pb-2 pr-3 w-14 cursor-pointer select-none" data-sort="match" title="How well this job matches your skill profile (SQL, Python, Power BI, fraud, SEO)">
+            Match <span class="sort-arrow text-neutral-600"></span>
+          </th>
+          <th class="pb-2 pr-3 cursor-pointer select-none" data-sort="title">
+            Title <span class="sort-arrow text-neutral-600"></span>
+          </th>
+          <th class="pb-2 pr-3 cursor-pointer select-none" data-sort="company">
+            Company <span class="sort-arrow text-neutral-600"></span>
+          </th>
+          <th class="pb-2 pr-3 w-32 cursor-pointer select-none" data-sort="salary_num" title="Estimated monthly salary in HKD based on seniority, company tier, and role type">
+            Salary <span class="sort-arrow text-neutral-600"></span>
+          </th>
+          <th class="pb-2 pr-3 w-16 cursor-pointer select-none" data-sort="seniority" title="Seniority level detected from job title">
+            Level <span class="sort-arrow text-neutral-600"></span>
+          </th>
+          <th class="pb-2 pr-3 w-20 cursor-pointer select-none" data-sort="work_mode" title="Work arrangement: Remote, Hybrid, or On-site">
+            Mode <span class="sort-arrow text-neutral-600"></span>
+          </th>
+          <th class="pb-2 w-20" title="Job board source where this listing was found">Source</th>
+        </tr>
+      </thead>
+      <tbody id="jobTableBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Card view (hidden by default) -->
+<div id="cardView" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-3">
+</div>
+
+<!-- Pagination -->
+<div class="flex items-center justify-between text-sm text-neutral-500 mb-6 px-1">
+  <span id="tableInfo" class="text-xs">0 jobs</span>
+  <div class="flex items-center gap-1">
+    <button id="prevPageBtn" class="px-3 py-1.5 rounded-md bg-neutral-800/80 hover:bg-neutral-700 text-xs transition border border-neutral-700/50">Prev</button>
+    <span id="pageInfo" class="px-2.5 text-xs text-neutral-400">1/1</span>
+    <button id="nextPageBtn" class="px-3 py-1.5 rounded-md bg-neutral-800/80 hover:bg-neutral-700 text-xs transition border border-neutral-700/50">Next</button>
+  </div>
+</div>

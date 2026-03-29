@@ -1,0 +1,79 @@
+name: Daily HK Job Scrape
+
+on:
+  schedule:
+    - cron: '0 1 * * *'  # 9:00 AM HKT (UTC+8)
+  workflow_dispatch:
+
+jobs:
+  scrape-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Create data directory
+        run: mkdir -p frontend/public/data
+
+      - name: Run scraper (all categories, 5 sources)
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python generate_data.py --force
+
+      - name: Verify scraped data
+        run: |
+          echo "=== Scraped Data ==="
+          ls -la frontend/public/data/
+          echo "Total JSON files: $(ls frontend/public/data/*.json 2>/dev/null | wc -l)"
+
+      - name: Hunter.io enrichment (recruiter emails)
+        env:
+          HUNTER_API_KEY: ${{ secrets.HUNTER_API_KEY }}
+        run: python hunter_enricher.py --max 30
+        continue-on-error: true
+
+      - name: Build Astro frontend
+        working-directory: ./frontend
+        run: npm run build
+
+      - name: Deploy to Hostinger via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          local-dir: ./frontend/dist/
+          server-dir: /hk-jobs/
+          protocol: ftps
+
+      - name: Upload counter.php
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          local-dir: ./frontend/public/
+          server-dir: /hk-jobs/
+          exclude: |
+            data/**
+            .htaccess
+          protocol: ftps

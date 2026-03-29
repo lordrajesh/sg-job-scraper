@@ -1,0 +1,135 @@
+---
+// Collapsible HK tax calculator — verified against 2025/26 IRD rates
+// Sources: gov.hk/en/residents/taxes, mpfa.org.hk
+// Includes: MPF (5% capped at $1,500/mo), progressive bands, 15% standard rate cap
+---
+
+<div class="glass mb-4">
+  <button id="taxToggle" class="w-full flex items-center justify-between p-4 text-left">
+    <div>
+      <span class="text-sm font-semibold text-white">Salary Tax Calculator</span>
+      <span class="text-xs text-neutral-500 ml-2">2025/26 rates &middot; incl. MPF</span>
+    </div>
+    <svg id="taxArrow" class="collapse-arrow w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+    </svg>
+  </button>
+  <div id="taxContent" class="hidden px-4 pb-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 items-end">
+      <div>
+        <label class="block text-xs text-neutral-400 mb-1">Monthly Gross (HKD)</label>
+        <input type="number" id="taxGross" placeholder="35000" class="input w-full" />
+      </div>
+      <div>
+        <button id="taxCalcBtn" class="w-full bg-orange-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-orange-700 transition font-medium">
+          Calculate
+        </button>
+      </div>
+      <div id="taxR1" class="hidden text-center">
+        <div class="text-lg font-bold text-emerald-400" id="taxMonthlyNet">—</div>
+        <div class="text-xs text-neutral-400">Monthly Net</div>
+      </div>
+      <div id="taxR2" class="hidden text-center">
+        <div class="text-lg font-bold text-orange-400" id="taxMonthlyMPF">—</div>
+        <div class="text-xs text-neutral-400">MPF (5%)</div>
+      </div>
+      <div id="taxR3" class="hidden text-center">
+        <div class="text-lg font-bold text-orange-300" id="taxEffRate">—</div>
+        <div class="text-xs text-neutral-400">Eff. Tax Rate</div>
+      </div>
+    </div>
+    <div id="taxNote" class="hidden mt-3 text-xs text-neutral-500">
+      <span id="taxNoteText"></span>
+    </div>
+    <div class="mt-3 text-xs text-neutral-600">
+      Based on 2025/26 IRD rates. Basic allowance HK$132,000. MPF: 5% capped at HK$1,500/mo.
+      Standard rate: 15%. <a href="https://www.gov.hk/en/residents/taxes/taxfiling/taxrates/salariesrates.htm" target="_blank" rel="noopener" class="text-orange-500 hover:text-orange-400">Source: GovHK</a>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+document.addEventListener('DOMContentLoaded', function() {
+  var taxToggle = document.getElementById('taxToggle');
+  var taxContent = document.getElementById('taxContent');
+  var taxArrow = document.getElementById('taxArrow');
+  var taxCalcBtn = document.getElementById('taxCalcBtn');
+
+  if (!taxToggle || !taxCalcBtn) return;
+
+  taxToggle.addEventListener('click', function() {
+    taxContent.classList.toggle('hidden');
+    taxArrow.classList.toggle('open');
+  });
+
+  taxCalcBtn.addEventListener('click', function() {
+    var monthly = parseFloat(document.getElementById('taxGross').value);
+    if (!monthly || monthly <= 0) return;
+
+    // --- MPF (Mandatory Provident Fund) ---
+    // Employee: 5% of income, capped at HK$1,500/month ($30,000 cap × 5%)
+    // Below HK$7,100/month: no employee contribution
+    var mpfMonthly = 0;
+    if (monthly >= 7100) {
+      mpfMonthly = Math.min(monthly * 0.05, 1500);
+    }
+    var mpfAnnual = mpfMonthly * 12;
+
+    // --- Salaries Tax (2025/26) ---
+    var annualGross = monthly * 12;
+
+    // Assessable income after MPF deduction (MPF is tax-deductible up to $18,000/yr)
+    var mpfDeductible = Math.min(mpfAnnual, 18000);
+    var assessable = annualGross - mpfDeductible;
+
+    // Net chargeable income = assessable - basic allowance ($132,000)
+    var allowance = 132000;
+    var chargeable = Math.max(0, assessable - allowance);
+
+    // Progressive rates
+    var bands = [[50000, 0.02], [50000, 0.06], [50000, 0.10], [50000, 0.14], [Infinity, 0.17]];
+    var progressiveTax = 0;
+    var rem = chargeable;
+    for (var i = 0; i < bands.length; i++) {
+      var taxable = Math.min(rem, bands[i][0]);
+      progressiveTax += taxable * bands[i][1];
+      rem -= taxable;
+      if (rem <= 0) break;
+    }
+
+    // Standard rate: 15% of net income (assessable - deductions, before allowance)
+    // Two-tiered since 2024/25: 15% on first $5M, 16% on remainder
+    var standardBase = assessable; // net income before allowance
+    var standardTax;
+    if (standardBase <= 5000000) {
+      standardTax = standardBase * 0.15;
+    } else {
+      standardTax = 5000000 * 0.15 + (standardBase - 5000000) * 0.16;
+    }
+
+    // Pay whichever is lower
+    var annualTax = Math.max(0, Math.min(progressiveTax, standardTax));
+    var method = annualTax === progressiveTax ? 'progressive' : 'standard rate';
+
+    var monthlyTax = annualTax / 12;
+    var monthlyNet = monthly - mpfMonthly - monthlyTax;
+    var effRate = annualGross > 0 ? ((annualTax / annualGross) * 100).toFixed(1) : '0.0';
+
+    // Update UI
+    document.getElementById('taxMonthlyNet').textContent = 'HK$' + Math.round(monthlyNet).toLocaleString();
+    document.getElementById('taxMonthlyMPF').textContent = 'HK$' + Math.round(mpfMonthly).toLocaleString();
+    document.getElementById('taxEffRate').textContent = effRate + '%';
+    document.getElementById('taxR1').classList.remove('hidden');
+    document.getElementById('taxR2').classList.remove('hidden');
+    document.getElementById('taxR3').classList.remove('hidden');
+
+    // Note
+    var noteEl = document.getElementById('taxNote');
+    var noteText = document.getElementById('taxNoteText');
+    noteText.textContent = 'Tax: HK$' + Math.round(annualTax).toLocaleString() + '/yr (' + method
+      + ') | MPF: HK$' + Math.round(mpfAnnual).toLocaleString() + '/yr'
+      + ' | Take-home: HK$' + Math.round(monthlyNet).toLocaleString() + '/mo';
+    noteEl.classList.remove('hidden');
+  });
+});
+</script>

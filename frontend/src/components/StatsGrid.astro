@@ -1,0 +1,26 @@
+---
+// 5 KPI cards with tooltips
+---
+
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-3">
+  <div class="stat-card p-4" title="Total unique job listings in this category">
+    <div class="text-3xl font-bold text-white" id="statJobs">&mdash;</div>
+    <div class="text-[11px] text-neutral-500 mt-1">Vacancies</div>
+  </div>
+  <div class="stat-card p-4" title="Number of distinct hiring companies">
+    <div class="text-3xl font-bold text-orange-400" id="statCompanies">&mdash;</div>
+    <div class="text-[11px] text-neutral-500 mt-1">Companies</div>
+  </div>
+  <div class="stat-card p-4" title="Median monthly salary estimate in HKD, calibrated from JobsDB and market data">
+    <div class="text-3xl font-bold text-emerald-400" id="statSalary">&mdash;</div>
+    <div class="text-[11px] text-neutral-500 mt-1">Median Salary</div>
+  </div>
+  <div class="stat-card p-4" title="Companies known to hire international talent or mentioning visa sponsorship / relocation support">
+    <div class="text-3xl font-bold text-purple-400" id="statTTPS">&mdash;</div>
+    <div class="text-[11px] text-neutral-500 mt-1">TTPS-Friendly</div>
+  </div>
+  <div class="stat-card p-4 hidden sm:block" title="Number of job board sources aggregated (LinkedIn, Indeed, Google, JobsDB, Lever, Greenhouse)">
+    <div class="text-3xl font-bold text-orange-300" id="statSources">&mdash;</div>
+    <div class="text-[11px] text-neutral-500 mt-1">Sources</div>
+  </div>
+</div>

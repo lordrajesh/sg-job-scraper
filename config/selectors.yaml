@@ -1,0 +1,2 @@
+# All active scrapers use APIs (GraphQL, Lever, Greenhouse, JobSpy).
+# No CSS selectors are needed. This file is kept as a placeholder.

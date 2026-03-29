@@ -1,0 +1,52 @@
+---
+// Collapsible insights — salary brackets + salary by seniority + top employers
+// Orange accent charts on black background
+---
+
+<div class="glass mb-4">
+  <button id="insightsToggle" class="w-full flex items-center justify-between p-4 text-left">
+    <div>
+      <span class="text-sm font-semibold text-white">Market Insights</span>
+      <span class="text-xs text-neutral-500 ml-2">Salary distribution, seniority pay, top employers</span>
+    </div>
+    <svg id="insightsArrow" class="collapse-arrow w-4 h-4 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+    </svg>
+  </button>
+  <div id="insightsContent" class="px-4 pb-4">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+      <!-- Salary brackets (horizontal bars like Mexico) -->
+      <div id="salarySection">
+        <h4 class="text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">Where's the Money? (HKD/month)</h4>
+        <div class="chart-box"><canvas id="salaryChart"></canvas></div>
+      </div>
+      <!-- Salary by seniority -->
+      <div id="senioritySection">
+        <h4 class="text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">Salary by Seniority</h4>
+        <div class="chart-box"><canvas id="seniorityChart"></canvas></div>
+      </div>
+    </div>
+    <!-- Top employers (full width) -->
+    <div id="employersSection">
+      <h4 class="text-xs font-medium text-neutral-400 uppercase tracking-wider mb-2">Top Employers</h4>
+      <div class="chart-box"><canvas id="employersChart"></canvas></div>
+    </div>
+    <div id="insightsEmpty" class="hidden text-center py-8 text-sm text-neutral-500">
+      Not enough data to show insights for this category.
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+document.addEventListener('DOMContentLoaded', function() {
+  var toggle = document.getElementById('insightsToggle');
+  var content = document.getElementById('insightsContent');
+  var arrow = document.getElementById('insightsArrow');
+  if (toggle && content) {
+    toggle.addEventListener('click', function() {
+      content.classList.toggle('hidden');
+      arrow.classList.toggle('open');
+    });
+  }
+});
+</script>

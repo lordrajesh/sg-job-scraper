@@ -1,0 +1,163 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: #0a0a0a;
+    color: #e2e8f0;
+  }
+  *, *::before, *::after {
+    border-color: rgba(255, 255, 255, 0.06);
+  }
+}
+
+@layer components {
+  /* ── Glass card ────────────────────────────────────────── */
+  .glass {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+  }
+
+  /* ── Stat cards ────────────────────────────────────────── */
+  .stat-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0.75rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 0 1px rgba(255, 255, 255, 0.05);
+    transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+  }
+  .stat-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(249, 115, 22, 0.35);
+    box-shadow: 0 4px 24px rgba(249, 115, 22, 0.07);
+  }
+
+  /* ── Match bar ─────────────────────────────────────────── */
+  .match-bar {
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.06);
+    overflow: hidden;
+  }
+  .match-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s;
+  }
+
+  /* ── Source badges ──────────────────────────────────────── */
+  .badge {
+    font-size: 0.6rem;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    display: inline-block;
+    line-height: 1.4;
+  }
+  .badge-linkedin    { background: #0a66c2; color: #fff; }
+  .badge-indeed      { background: #2557a7; color: #fff; }
+  .badge-google      { background: #34a853; color: #fff; }
+  .badge-jobsdb      { background: #e60278; color: #fff; }
+  .badge-lever       { background: #1eb47c; color: #fff; }
+  .badge-greenhouse  { background: #24a148; color: #fff; }
+  .badge-ttps        { background: #7c3aed; color: #fff; font-size: 0.55rem; }
+
+  /* ── Work mode pills (high contrast) ───────────────────── */
+  .wm-remote  { background: #065f46; color: #6ee7b7; border: 1px solid #047857; }
+  .wm-hybrid  { background: #1e3a5f; color: #93c5fd; border: 1px solid #1e40af; }
+  .wm-onsite  { background: #4a2600; color: #fdba74; border: 1px solid #9a3412; }
+
+  /* ── Job rows & cards ──────────────────────────────────── */
+  .job-row { transition: background 0.1s; }
+  .job-row:hover { background: rgba(249, 115, 22, 0.06); }
+  .job-card {
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .job-card:hover {
+    border-color: rgba(249, 115, 22, 0.25);
+    box-shadow: 0 2px 16px rgba(249, 115, 22, 0.06);
+  }
+
+  /* ── Chart container ───────────────────────────────────── */
+  .chart-box { position: relative; height: 260px; }
+
+  /* ── Collapsible ───────────────────────────────────────── */
+  .collapse-arrow { transition: transform 0.2s; }
+  .collapse-arrow.open { transform: rotate(180deg); }
+
+  /* ── Inputs — dark theme ───────────────────────────────── */
+  .input {
+    background: rgba(255, 255, 255, 0.05);
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    transition: border-color 0.15s;
+  }
+  .input:focus {
+    border-color: #f97316;
+    outline: none;
+  }
+  select.input {
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    padding-right: 1.75rem;
+  }
+  select.input option {
+    background: #1a1a1a;
+    color: #e2e8f0;
+  }
+
+  /* ── Sticky filter bar ─────────────────────────────────── */
+  .filter-bar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: rgba(10, 10, 10, 0.97);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  /* ── Salary display ────────────────────────────────────── */
+  .salary-real { color: #f97316; font-weight: 500; }
+  .salary-est {
+    color: #a3a3a3;
+    font-style: italic;
+    font-size: 0.8rem;
+    cursor: help;
+  }
+  .salary-none { color: #404040; font-style: italic; font-size: 0.75rem; }
+
+  /* ── View toggle ───────────────────────────────────────── */
+  .view-btn {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    transition: all 0.15s;
+    border: 1px solid transparent;
+  }
+  .view-btn.active {
+    background: rgba(249, 115, 22, 0.15);
+    color: #f97316;
+    border-color: rgba(249, 115, 22, 0.3);
+  }
+  .view-btn:not(.active) {
+    color: #525252;
+  }
+  .view-btn:not(.active):hover {
+    color: #a3a3a3;
+  }
+}

@@ -1,0 +1,36 @@
+# HK Job Dashboard — Hostinger /hk-jobs/
+
+# === Caching ===
+<IfModule mod_headers.c>
+  # HTML: never cache (always fresh on deploy)
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate, max-age=0"
+  </FilesMatch>
+
+  # JSON data: 5 min cache (JS busts with ?v=timestamp)
+  <FilesMatch "\.json$">
+    Header set Cache-Control "public, max-age=300"
+  </FilesMatch>
+
+  # Static assets: 1 year cache (Astro hashes filenames)
+  <FilesMatch "\.(css|js|woff2?|svg|png|jpg|webp)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+
+# === Compression ===
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html application/json text/css application/javascript text/xml application/xml
+</IfModule>
+
+# === Security Headers ===
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set X-XSS-Protection "1; mode=block"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+</IfModule>
+
+# === Error Pages ===
+ErrorDocument 404 /hk-jobs/index.html
