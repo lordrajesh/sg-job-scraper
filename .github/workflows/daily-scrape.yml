@@ -57,25 +57,4 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           working-directory: ./frontend
           production: true
-
-      - name: Upload counter.php via FTPS
-        env:
-          FTP_USER: ${{ secrets.FTP_USER }}
-          FTP_PASS: ${{ secrets.FTP_PASS }}
-          FTP_HOST: ${{ secrets.FTP_HOST }}
-        run: |
-          for f in ./frontend/public/*; do
-            [ -d "$f" ] && continue
-            fname=$(basename "$f")
-            [[ "$fname" == ".htaccess" ]] && continue
-            curl --ssl-reqd --insecure \
-              -T "$f" \
-              "ftp://$FTP_HOST/hk-jobs/$fname" \
-              --user "$FTP_USER:$FTP_PASS" \
-              --connect-timeout 30 \
-              --max-time 60 \
-              --retry 2 \
-              -s
-            echo "Uploaded $fname"
-          done
           echo "Done — public files deployed"

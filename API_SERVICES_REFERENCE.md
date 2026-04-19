@@ -10,41 +10,41 @@
 - **Usage**: `JobSpyScraper` class in `scrapers/jobspy_scraper.py`
 
 ### 2. **JobsDB GraphQL API** — FREE
-- **Purpose**: Hong Kong job listings (local DB with full descriptions)
+- **Purpose**: Singapore job listings (local DB with full descriptions)
 - **Auth**: None (public endpoint)
 - **Cost**: Free
-- **Endpoint**: `https://hk.jobsdb.com/graphql`
+- **Endpoint**: `https://sg.jobsdb.com/graphql`
 - **Usage**: `JobsDBScraper` class in `scrapers/jobsdb.py`
 - **Note**: Reverse-engineered; may change if JobsDB updates
 
 ### 3. **Lever API** — FREE
-- **Purpose**: Company career pages (Binance, Animoca, etc.)
+- **Purpose**: Company career pages (Stripe, Microsoft, Google, etc.)
 - **Auth**: None (public endpoint)
 - **Cost**: Free
 - **Endpoint**: `https://api.lever.co/v0/postings/{company}`
 - **Usage**: `LeverScraper` class in `scrapers/lever.py`
-- **Coverage**: ~138 HK jobs from known companies
+- **Coverage**: ~150+ Singapore jobs from known companies
 
 ### 4. **Greenhouse API** — FREE
-- **Purpose**: Company career pages (OKX, Agoda, etc.)
+- **Purpose**: Company career pages (tech & finance leaders)
 - **Auth**: None (public endpoint)
 - **Cost**: Free
 - **Endpoint**: `https://boards.greenhouse.io/api/v1/boards/{board_token}/jobs`
 - **Usage**: `GreenhouseScraper` class in `scrapers/greenhouse.py`
-- **Coverage**: ~131 HK jobs from known companies
+- **Coverage**: ~150+ Singapore jobs from known companies
 
 ---
 
 ## Optional APIs (Recommended Features)
 
-### 5. **Hunter.io** — PAID ($99+/month)
+### 5. **Hunter.io** — PAID ($99+/month) [OPTIONAL]
 - **Purpose**: Find & verify recruiter emails at target companies
 - **When to use**: Advanced job hunting (reach out to recruiters directly)
 - **Cost**: $99+/month (1,660 credits/month)
 - **Signup**: https://hunter.io/pricing
-- **Usage**: `hunter_enricher.py` (already integrated)
+- **Usage**: `hunter_enricher.py` (optional integration)
 - **Auth**: Add `HUNTER_API_KEY` to `.env`
-- **Current Status**: Already configured with test data (Alessandro Ene at Binance)
+- **Current Status**: Not actively used in daily workflow (optional feature)
 
 ### 6. **GitHub Actions** — FREE
 - **Purpose**: Automatic daily job scraping & website refresh
@@ -56,41 +56,33 @@
   3. Add GitHub secrets for any API keys
 - **Current Status**: Ready to configure (examples in `CLAUDE.md`)
 
-### 7. **Web Hosting** — PAID ($3-5/month or FREE)
+### 7. **Web Hosting & Deployment** — FREE or PAID
 
-#### Option A: **Hostinger FTP** (Current Setup)
-- **Cost**: $2.99-12/month (shared hosting)
-- **Signup**: https://www.hostinger.com
-- **Setup**:
-  1. Register domain (optional)
-  2. Get FTP credentials
-  3. Add to `.env`: HOSTINGER_FTP_HOST, HOSTINGER_FTP_USER, HOSTINGER_FTP_PASS
-  4. Run `python deploy.py` to upload
-- **Usage**: `deploy.py` handles upload
-- **Benefit**: Works with GitHub Actions for auto-deployment
+#### Option A: **Vercel** (RECOMMENDED) ✅
+- **Cost**: Free tier available
+- **Signup**: https://vercel.com
+- **Setup**: 
+  1. Create account (GitHub login recommended)
+  2. Import `lordrajesh/sg-job-scraper` from GitHub
+  3. Set root directory: `./frontend`
+  4. Create GitHub secrets: VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID
+  5. GitHub Actions automatically deploys on git push
+- **Benefit**: Zero-config Astro deployment, instant preview URLs, automatic daily builds
+- **Best for**: Our current setup (automatic daily scraping + deployment)
+- **Current Status**: Configured in GitHub Actions workflow
 
 #### Option B: **GitHub Pages** (FREE)
 - **Cost**: Free
 - **Setup**:
   1. Push `frontend/dist/` to `gh-pages` branch
   2. Enable Pages in repo settings
-  3. URL: `https://username.github.io/hk-job-scraper/`
+  3. URL: `https://lordrajesh.github.io/sg-job-scraper/`
 - **Benefit**: No server needed, integrated with GitHub
-- **Downside**: No FTP credentials needed, but setup requires GitHub Actions workflow
+- **Downside**: Slower custom domain setup
 
-#### Option C: **Vercel** (FREE + Paid)
+#### Option C: **Netlify** (FREE + Paid)
 - **Cost**: Free tier available
-- **Signup**: https://vercel.com
-- **Setup**: 
-  1. Import GitHub repo
-  2. Select `frontend` as root directory
-  3. Deploy on git push
-- **Benefit**: Zero-config Astro deployment, instant preview URLs
-- **Best for**: Fastest setup
-
-#### Option D: **Netlify** (FREE + Paid)
-- **Cost**: Free tier available
-- **Setup**: Similar to Vercel (import, auto-deploy)
+- **Setup**: Similar to Vercel (import repo, auto-deploy)
 - **Benefit**: Easy environment variable management
 
 ---
