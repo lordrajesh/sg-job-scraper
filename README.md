@@ -4,14 +4,7 @@ Real-time Singapore job market dashboard aggregating 1,000+ listings from 7 sour
 
 **Targeted for:** Rajesh Rajagopalan — Senior Data Analyst, Fraud/Risk Analyst, Business Analyst roles (SGD 13,000+ minimum salary expectation)
 
-![Dashboard Screenshot](docs/screenshot.png)
-
-<details>
-<summary>Mobile view</summary>
-
-![Mobile Screenshot](docs/screenshot-mobile.png)
-
-</details>
+> **Note:** Dashboard screenshots will be available after first deployment to Vercel and initial scrape run
 
 ## Architecture
 
@@ -22,12 +15,10 @@ LinkedIn  ─┐                    Pydantic models             Astro.js + Tailw
 Indeed    ─┤ JobSpy             3-layer dedup               Chart.js analytics
 Google    ─┘                    Skill matching (0-100)      Table + Card views
 JobsDB ──── GraphQL API    ──►  Salary estimation      ──►  Sticky filters
-Binance ─┐                      TTPS detection              Tax calculator
-Animoca ─┤ Lever API            Seniority detection         Excel export
-OKX ─────┐                      Category relevance
-Agoda ───┤ Greenhouse API
-         └──────────────────────────────────────────────────────────────────►
-                                                            JSON ──► Astro ──► FTP
+Lever ──┐                       EP eligibility              Tax calculator
+Greenhouse ┤ APIs               Seniority detection         Excel export
+          └──────────────────────────────────────────────────────────────────►
+                                                            JSON ──► Astro ──► Vercel
                                                             GitHub Actions (daily)
 ```
 
@@ -50,7 +41,7 @@ Agoda ───┤ Greenhouse API
 | Analysis | Custom scoring, salary estimation, regex-based detection |
 | Frontend | Astro 5, Tailwind CSS 3, Chart.js |
 | Testing | pytest (134 tests) |
-| Deployment | GitHub Actions, Hostinger FTP |
+| Deployment | GitHub Actions, Vercel |
 
 ## Quick Start
 
