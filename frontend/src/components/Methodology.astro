@@ -14,26 +14,27 @@
     <strong class="text-neutral-300">LinkedIn</strong>, <strong class="text-neutral-300">Indeed</strong>,
     <strong class="text-neutral-300">Google Jobs</strong> (via JobSpy),
     <strong class="text-neutral-300">JobsDB</strong> (GraphQL API),
-    <strong class="text-neutral-300">Lever</strong> and <strong class="text-neutral-300">Greenhouse</strong> (ATS APIs for Binance, OKX, Agoda, Animoca, and others).
+    <strong class="text-neutral-300">Lever</strong> and <strong class="text-neutral-300">Greenhouse</strong> (ATS APIs for major tech/finance companies).
     Refreshed daily via GitHub Actions. All data is publicly available job postings.</p>
 
     <p><strong class="text-neutral-300">Salary estimation:</strong>
-    Most HK employers do not publish salary. Estimates are calibrated from
-    <a href="https://hk.jobsdb.com/career-advice/role/data-analyst/salary" target="_blank" rel="noopener" class="text-orange-500 hover:text-orange-400">JobsDB salary medians (March 2026)</a>,
-    <a href="https://fastlanehr.hk/average-salary-in-hong-kong/" target="_blank" rel="noopener" class="text-orange-500 hover:text-orange-400">FastLane HR benchmarks</a>, and
-    <a href="https://www.roberthalf.com/hk/en/insights/salary-guide" target="_blank" rel="noopener" class="text-orange-500 hover:text-orange-400">Robert Half 2026 HK Salary Guide</a>.
-    The model uses 5 signals: seniority level, company tier, role category, TTPS status, and premium skill keywords.
-    Confidence is rated High (3+ signals), Medium (1&ndash;2), or Low (baseline only).</p>
+    Singapore salaries are estimated using industry benchmarks from
+    <a href="https://sg.jobsdb.com/" target="_blank" rel="noopener" class="text-orange-500 hover:text-orange-400">JobsDB Singapore</a>,
+    <a href="https://www.payscale.com/research/SG/" target="_blank" rel="noopener" class="text-orange-500 hover:text-orange-400">PayScale Singapore 2026</a>, and
+    <a href="https://www.roberthalf.com/sg/en/insights/salary-guide" target="_blank" rel="noopener" class="text-orange-500 hover:text-orange-400">Robert Half Singapore Salary Guide 2026</a>.
+    The model uses 5 signals: seniority level, company tier, role category, Employment Pass eligibility, and premium skill keywords.
+    Confidence is rated High (3+ signals), Medium (1–2), or Low (baseline only).
+    Rajesh's minimum salary expectation: <strong>SGD 13,000/month</strong> (currently earning SGD 15,000).</p>
 
-    <p><strong class="text-neutral-300">Fit score:</strong> Measures how well a job title matches the selected category (e.g., selecting "Fintech" ranks fintech/crypto/blockchain titles higher).</p>
+    <p><strong class="text-neutral-300">Fit score:</strong> Measures how well a job title matches the selected category (e.g., selecting "Fraud Investigator" ranks fraud/financial crime investigator titles higher).</p>
 
-    <p><strong class="text-neutral-300">Match score:</strong> Measures alignment with a specific skill profile: Power BI, SQL, Python, fraud detection, technical SEO. Title keywords contribute up to 25 points, description skills up to 75.</p>
+    <p><strong class="text-neutral-300">Match score:</strong> Measures alignment with Rajesh's skill profile: SQL, Power BI, Tableau, Python, Microsoft Azure, Scikit-Learn, XGBoost, and emerging tools (OpenAI APIs, Prompt Engineering). Title keywords contribute up to 30 points, description skills up to 70.</p>
 
-    <p><strong class="text-neutral-300">TTPS-Friendly:</strong> Flags ~60 known international-hiring companies (HSBC, Deloitte, Binance, Google, etc.) plus jobs mentioning visa sponsorship, relocation support, or diverse/global teams.</p>
+    <p><strong class="text-neutral-300">Employment Pass Friendly:</strong> Flags ~50 known international companies (banks, Big4, FAANG, etc.) plus jobs mentioning visa sponsorship, work permits, relocation support, or diverse/global teams.</p>
 
     <p><strong class="text-neutral-300">Deduplication:</strong> 3-layer system &mdash; URL canonicalization, exact title+company matching, and fuzzy matching (70%+ title similarity) across all sources. Prevents the same job from appearing twice.</p>
 
-    <p><strong class="text-neutral-300">Tech stack:</strong> Python (async httpx, Pydantic, pandas), Astro.js + Tailwind CSS frontend, Chart.js visualizations, 134 unit tests (pytest), GitHub Actions CI/CD, Hostinger FTP deployment.</p>
+    <p><strong class="text-neutral-300">Tech stack:</strong> Python (async httpx, Pydantic, pandas), Astro.js + Tailwind CSS frontend, Chart.js visualizations, 134 unit tests (pytest), GitHub Actions CI/CD, Vercel/Hostinger deployment.</p>
   </div>
 </div>
 

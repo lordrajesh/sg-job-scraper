@@ -1,10 +1,10 @@
 """
-Generate JSON data files for the static frontend (Hong Kong).
-Targeted for TTPS visa holder profile: data analyst, web dev, technical SEO.
+Generate JSON data files for the static frontend (Singapore).
+Targeted for Employment Pass visa holder profile: fraud analyst, risk analyst, data analyst, business analyst, product/program manager.
 
 Usage:
     python generate_data.py                    # all categories
-    python generate_data.py --query "data analyst" --location "Hong Kong"
+    python generate_data.py --query "fraud analyst" --location "Singapore"
     python generate_data.py --force            # ignore cache
 """
 
@@ -30,89 +30,88 @@ from utils.analysis import extract_keywords, detect_mandarin, extract_max_salary
 DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "frontend", "public", "data")
 
 # ==========================================================================
-# CATEGORIES — targeted for Irmin's profile
+# CATEGORIES — targeted for Rajesh's profile (Singapore, fraud/risk/analytics)
 # Each category has multiple search queries to maximize coverage
 # ==========================================================================
 CATEGORIES = {
-    # Tier 1 — Core data roles
-    "data-analyst": {
-        "label": "Data Analyst",
-        "queries": ["data analyst", "reporting analyst", "business analyst data"],
+    # Tier 1 — Core fraud/risk/compliance roles
+    "fraud-investigator": {
+        "label": "Fraud Investigator",
+        "queries": ["fraud investigator", "financial crime investigator", "fraud analyst senior"],
     },
-    "business-intelligence": {
-        "label": "Business Intelligence",
-        "queries": ["power bi", "BI analyst", "business intelligence"],
+    "fraud-analyst": {
+        "label": "Fraud Analyst",
+        "queries": ["senior fraud analyst", "lead fraud analyst", "fraud analyst senior", "fraud detection analyst"],
     },
-    "fraud-risk-analyst": {
-        "label": "Fraud & Risk Analyst",
-        "queries": ["fraud analyst", "risk analyst", "AML analyst"],
+    "risk-analyst": {
+        "label": "Risk Analyst",
+        "queries": ["risk analyst senior", "risk analyst lead", "credit risk analyst"],
     },
-    "analytics-manager": {
-        "label": "Analytics Manager",
-        "queries": ["analytics manager", "data analytics lead", "head of analytics"],
-    },
-
-    # Tier 2 — Web dev + SEO
-    "web-developer": {
-        "label": "Web Developer",
-        "queries": ["web developer", "PHP developer", "WordPress developer"],
-    },
-    "full-stack-developer": {
-        "label": "Full Stack Developer",
-        "queries": ["full stack developer", "javascript developer", "frontend developer"],
-    },
-    "seo-digital-marketing": {
-        "label": "SEO & Digital Marketing",
-        "queries": ["technical SEO", "SEO specialist", "SEO manager", "digital marketing analyst"],
+    "risk-manager": {
+        "label": "Risk Manager",
+        "queries": ["risk manager", "senior risk manager", "operational risk manager"],
     },
 
-    # Tier 3 — Emerging + adjacent
+    # Tier 2 — Data/Business Analysis
+    "senior-data-analyst": {
+        "label": "Senior Data Analyst",
+        "queries": ["senior data analyst", "lead data analyst", "data analyst senior"],
+    },
+    "business-analyst": {
+        "label": "Business Analyst",
+        "queries": ["senior business analyst", "business analyst", "business analysis senior"],
+    },
+    "financial-analyst": {
+        "label": "Financial Analyst",
+        "queries": ["senior financial analyst", "lead financial analyst", "financial crime analyst senior", "financial data analyst"],
+    },
+
+    # Tier 3 — Product/Project/Program Management
+    "program-manager": {
+        "label": "Program Manager",
+        "queries": ["program manager", "senior program manager", "lead program manager"],
+    },
+    "product-manager": {
+        "label": "Product Manager",
+        "queries": ["product manager", "senior product manager", "lead product manager"],
+    },
+    "project-manager": {
+        "label": "Project Manager",
+        "queries": ["project manager senior", "senior project manager", "lead project manager"],
+    },
+    "compliance-analyst": {
+        "label": "Compliance Analyst",
+        "queries": ["senior compliance analyst", "lead compliance analyst", "aml analyst senior", "compliance officer"],
+    },
     "data-engineer": {
         "label": "Data Engineer",
-        "queries": ["data engineer", "analytics engineer", "data pipeline"],
-    },
-    "product-analyst": {
-        "label": "Product Analyst",
-        "queries": ["product analyst", "growth analyst", "insights analyst"],
-    },
-    "python-automation": {
-        "label": "Python & Automation",
-        "queries": ["python developer", "python analyst", "process automation"],
-    },
-    "ai-data-science": {
-        "label": "AI & Data Science",
-        "queries": ["data scientist", "machine learning analyst", "AI analyst"],
-    },
-    "fintech": {
-        "label": "Fintech",
-        "queries": ["fintech analyst", "fintech data", "fintech"],
+        "queries": ["senior data engineer", "lead data engineer", "analytics engineer senior", "big data engineer"],
     },
 }
 
 # ==========================================================================
-# SKILL MATCH SCORING — against Irmin's actual stack
+# SKILL MATCH SCORING — against Rajesh's actual stack (SG-focused)
 # ==========================================================================
 PROFILE_SKILLS = {
-    # Weight 3 — expert level
-    "power bi": 3, "sql": 3, "python": 3, "excel": 3,
-    "data analysis": 3, "fraud": 3, "seo": 3, "technical seo": 3,
-    "reporting": 3, "dashboard": 3,
+    # Weight 3 — expert level (core tools)
+    "sql": 3, "power bi": 3, "powerbi": 3, "tableau": 3,
+    "python": 3, "microsoft azure": 3, "azure": 3,
+    "data analysis": 3, "reporting": 3, "dashboard": 3,
+    "visualization": 3, "analytics": 3,
 
-    # Weight 2 — strong
-    "r": 2, "php": 2, "mysql": 2, "javascript": 2,
-    "wordpress": 2, "snowflake": 2, "power automate": 2,
-    "google search console": 2, "google analytics": 2,
-    "bi": 2, "kpi": 2, "html": 2, "css": 2,
-    "aml": 2, "kyc": 2, "risk management": 2,
+    # Weight 2 — strong (ML/advanced tools)
+    "scikit-learn": 2, "xgboost": 2, "sklearn": 2,
+    "machine learning": 2, "azure ml": 2, "ml": 2,
+    "azure synapse": 2, "synapse": 2, "cosmos db": 2,
+    "fraud detection": 2, "risk analysis": 2, "compliance": 2,
+    "aml": 2, "kyc": 2, "excel": 2, "ms office": 2,
 
-    # Weight 1 — familiar / learning
-    "machine learning": 1, "pytorch": 1, "langchain": 1,
-    "docker": 1, "git": 1, "api": 1, "django": 1,
-    "tableau": 1, "azure": 1, "aws": 1,
-    "react": 1, "node.js": 1,
-    "dbt": 1, "bigquery": 1,
-    "jira": 1, "agile": 1,
-    "sem": 1, "google ads": 1,
+    # Weight 1 — learning / emerging
+    "openai": 1, "prompt engineering": 1, "gpt": 1,
+    "api": 1, "rest api": 1, "json": 1,
+    "git": 1, "docker": 1, "agile": 1,
+    "aws": 1, "gcp": 1, "postgresql": 1,
+    "jira": 1, "power automate": 1, "automation": 1,
 }
 
 
@@ -120,15 +119,54 @@ def calc_skill_match(title: str, description: str, skills_found: list) -> int:
     """Score 0-100 based on how well a job matches the profile.
     Also checks job title for role-level relevance."""
 
-    # Title-based relevance (many jobs lack descriptions)
+    # Title-based relevance (many jobs lack descriptions) — Rajesh's target roles
     TITLE_KEYWORDS = {
-        "data analyst": 25, "bi analyst": 25, "business intelligence": 25,
-        "reporting analyst": 20, "power bi": 25, "fraud analyst": 20,
-        "risk analyst": 20, "web developer": 20, "full stack": 20,
-        "seo": 20, "technical seo": 25, "digital marketing": 15,
-        "python": 15, "data engineer": 15, "product analyst": 15,
-        "analytics": 15, "dashboard": 10, "automation": 10,
-        "fintech": 10, "data scientist": 15,
+        # BANKING TITLES (very common in finance — explicit recognition for accuracy)
+        "evp": 33, "executive vice president": 33,
+        "svp": 33, "senior vice president": 33,
+        "vp": 32, "vice president": 32,
+        "avp": 30, "assistant vice president": 30,
+        "managing director": 33,
+        
+        # Top priority — senior/lead fraud/risk/financial crime roles (Rajesh wants SENIOR across ALL categories)
+        "senior fraud investigator": 32, "lead fraud investigator": 31,
+        "fraud investigator": 30, "financial crime investigator": 30,
+        "senior fraud analyst": 30, "lead fraud analyst": 29,
+        "fraud analyst": 28, "fraud detection analyst": 27,
+        
+        # Senior/Lead risk roles
+        "senior risk analyst": 27, "lead risk analyst": 26,
+        "risk analyst": 25,
+        "senior risk manager": 27, "lead risk manager": 26,
+        "risk manager": 25, "senior risk": 25,
+        
+        # Senior/Lead compliance roles
+        "senior compliance analyst": 23, "lead compliance analyst": 22,
+        "compliance analyst": 20, "aml analyst": 20,
+        
+        # Data/Business analysts (senior/lead priority)
+        "senior data analyst": 26, "lead data analyst": 26,
+        "senior business analyst": 26, "lead business analyst": 25,
+        "business analyst": 22, "data analyst": 20,
+        
+        # Senior/Lead financial analysts
+        "senior financial analyst": 26, "lead financial analyst": 25,
+        "financial analyst": 24, "financial crime analyst": 24,
+        
+        # Senior/Lead product/program/project management
+        "senior program manager": 20, "lead program manager": 19,
+        "program manager": 18,
+        "senior product manager": 20, "lead product manager": 19,
+        "product manager": 18,
+        "senior project manager": 20, "lead project manager": 19,
+        "project manager": 18,
+        
+        # Senior/Lead data engineer
+        "senior data engineer": 17, "lead data engineer": 16,
+        "data engineer": 16, "analytics engineer": 15,
+        
+        # Supporting technical/domain skills
+        "power bi": 20, "tableau": 18, "sql": 15, "python": 14, "analytics": 12,
     }
 
     title_lower = str(title or "").lower()
@@ -164,54 +202,57 @@ def calc_skill_match(title: str, description: str, skills_found: list) -> int:
 
 
 # ==========================================================================
-# TTPS-FRIENDLY DETECTION
+# EMPLOYMENT PASS-FRIENDLY DETECTION (Singapore visa sponsorship)
 # ==========================================================================
-TTPS_SIGNALS = [
-    r'visa\s+sponsorship', r'work\s+permit', r'right\s+to\s+work',
+EP_SIGNALS = [
+    r'employment\s+pass', r'work\s+visa', r'visa\s+sponsorship',
+    r'work\s+permit', r'work\s+authorisation?', r'work\s+authorization?',
     r'international\s+candidates?', r'overseas\s+candidates?',
     r'diverse\s+team', r'global\s+team', r'multicultural',
     r'international\s+environment', r'expatriate', r'expat',
     r'relocation\s+(?:package|support|assistance)',
     r'open\s+to\s+all\s+nationalit', r'regardless\s+of\s+nationality',
-    r'top\s+talent\s+pass', r'\bTTPS\b', r'quality\s+migrant',
+    r'ep\s+eligible', r'\bep\b\s+(?:ready|eligible)',
 ]
 
-TTPS_FRIENDLY_COMPANIES = {
-    # Global banks
-    "hsbc", "standard chartered", "jp morgan", "jpmorgan", "goldman sachs",
-    "morgan stanley", "citibank", "citi", "ubs", "credit suisse", "barclays",
-    "bnp paribas", "deutsche bank", "nomura", "macquarie",
+EP_FRIENDLY_COMPANIES = {
+    # Global banks (SG presence, known for EP sponsorship)
+    "hsbc", "standard chartered", "dbs", "ocbc", "uob",
+    "jp morgan", "jpmorgan", "goldman sachs", "morgan stanley",
+    "citibank", "citi", "ubs", "barclays", "macquarie", "nomura",
     # Big 4 + consulting
     "deloitte", "pwc", "pricewaterhousecoopers", "ey", "ernst & young",
     "kpmg", "mckinsey", "bcg", "bain", "accenture", "capgemini",
+    "oliver wyman", "boston consulting",
     # Tech giants
     "google", "meta", "microsoft", "amazon", "apple", "oracle", "ibm",
-    "salesforce", "sap", "adobe",
+    "salesforce", "sap", "adobe", "cisco", "intel",
     # Asian tech
-    "alibaba", "tencent", "bytedance", "tiktok", "huawei", "xiaomi",
-    "meituan", "jd.com", "baidu", "grab", "shopee", "lazada",
-    # HK fintech / startups
-    "revolut", "wise", "stripe", "airwallex", "welab", "zurich",
-    "klook", "lalamove", "gogovan", "animoca", "animoca brands", "hashkey",
-    # Exchanges / crypto
-    "hkex", "hong kong exchanges",
-    "binance", "okx", "bybit", "circle", "ripple", "crypto.com",
-    "bending spoons", "agoda",
+    "alibaba", "tencent", "bytedance", "tiktok", "baidu",
+    "grab", "shopee", "lazada", "sea group", "bukalapak",
+    # SG fintech / startups
+    "revolut", "wise", "stripe", "airwallex", "checkout",
+    "razer", "carousell", "ninja van", "edtech",
+    # Compliance / Risk / Fraud specialists
+    "refinitiv", "moody", "s&p", "reuters", "bloomberg",
+    "fenergo", "ascent", "falcon", "featurespace",
+    # Fintech / Crypto (if not mandarin-required)
+    "binance", "okx", "bybit", "crypto.com", "circle",
 }
 
 
-def detect_ttps_friendly(description: str, company: str) -> bool:
-    """Check if job/company is likely TTPS-friendly."""
+def detect_ep_friendly(description: str, company: str) -> bool:
+    """Check if job/company is likely Employment Pass friendly (Singapore)."""
     text = str(description or "").lower()
     comp = str(company or "").lower()
 
-    # Check company name against known TTPS-friendly list
-    for name in TTPS_FRIENDLY_COMPANIES:
+    # Check company name against known EP-friendly list
+    for name in EP_FRIENDLY_COMPANIES:
         if name in comp:
             return True
 
-    # Check description for TTPS signals
-    for pattern in TTPS_SIGNALS:
+    # Check description for EP signals
+    for pattern in EP_SIGNALS:
         if re.search(pattern, text, re.IGNORECASE):
             return True
 
@@ -238,78 +279,218 @@ def detect_work_mode(description: str, job_type: str) -> str:
 
 
 # ==========================================================================
-# SENIORITY DETECTION
+# SENIORITY DETECTION — Multi-signal approach
 # ==========================================================================
-def detect_seniority(title: str, description: str) -> str:
-    """Detect seniority level from title and description."""
-    text = str(title or "").lower()
-
-    if re.search(r'\b(head\s+of|director|vp|vice\s+president|chief|c-level)\b', text):
-        return "Director+"
-    if re.search(r'\b(senior|sr\.?|lead|principal)\b', text):
+def detect_seniority(title: str, description: str, salary: str = "") -> str:
+    """
+    Detect seniority level using multiple signals:
+    - Title keywords (explicit senior/lead/director)
+    - Years of experience required (implicit seniority)
+    - Responsibility keywords (lead, drive, strategic, mentor)
+    - Scope keywords (global, enterprise, cross-functional)
+    - Salary level (SGD, implicit seniority)
+    
+    Returns: "Director+", "Senior", "Manager", "Mid", or "Junior"
+    """
+    title_lower = str(title or "").lower()
+    desc_lower = str(description or "").lower()
+    sal_lower = str(salary or "").lower()
+    combined = title_lower + " " + desc_lower
+    
+    seniority_signals = 0
+    
+    # =================================================================
+    # SIGNAL 1: Explicit title keywords (strongest — weight 3)
+    # Banking/Financial Institution titles take precedence
+    # =================================================================
+    # Director+ level: SVP, EVP, Managing Director, Chief, C-suite, VP
+    if re.search(r'\b(svp|senior vice president|evp|executive vice president|managing director|md)\b', title_lower):
+        return "Director+"  # Senior Vice President / Executive VP = Director+
+    
+    if re.search(r'\b(vp|vice president|head\s+of|director|chief|c-level)\b', title_lower):
+        return "Director+"  # Immediate return for director-level
+    
+    # Senior level: AVP, Senior, Lead, Principal
+    if re.search(r'\b(avp|assistant vice president)\b', title_lower):
+        return "Senior"  # AVP (common in banking) = Senior level
+    
+    if re.search(r'\b(senior|sr\.?|lead|principal)\b', title_lower):
+        seniority_signals += 3
+    
+    # =================================================================
+    # SIGNAL 2: Years of experience required (weight 3)
+    # =================================================================
+    years_match = re.search(r'(\d+)\+?\s*(?:years?|yrs?)\s+(?:of\s+)?(?:experience|exp)', desc_lower)
+    if years_match:
+        years = int(years_match.group(1))
+        if years >= 8:
+            seniority_signals += 3  # 8+ years = definitely senior
+        elif years >= 6:
+            seniority_signals += 2  # 6-7 years = likely senior
+        elif years >= 4:
+            seniority_signals += 1  # 4-5 years = mid-senior
+        # Less than 4 years = no bonus
+    
+    # =================================================================
+    # SIGNAL 3: Responsibility & Leadership keywords (weight 2)
+    # =================================================================
+    leadership_keywords = [
+        r'\b(lead|leading|spearhead|drive|driven|champion)\b',
+        r'\b(head\s+of|director|manage|oversight|oversee)\b',
+        r'\b(strategic|strategy|strategic\s+partner)\b',
+        r'\b(mentor|mentoring|coaching|guide|lead\s+team)\b',
+        r'\b(architect|design|develop.*(?:platform|product|solution))\b',
+        r'\b(executive\s+(?:stakeholder|leadership)|senior\s+leadership)\b',
+    ]
+    for kw_pattern in leadership_keywords:
+        if re.search(kw_pattern, desc_lower):
+            seniority_signals += 2
+            break  # Only count once
+    
+    # =================================================================
+    # SIGNAL 4: Scope & Impact keywords (weight 1-2)
+    # =================================================================
+    scope_keywords = [
+        (r'\b(global|worldwide|international|enterprise|cross[\s-]?functional)\b', 2),
+        (r'\b(strategic\s+initiative|organizational|company[\s-]?wide|department[\s-]?wide)\b', 1),
+    ]
+    for pattern, weight in scope_keywords:
+        if re.search(pattern, desc_lower):
+            seniority_signals += weight
+            break  # Only count once
+    
+    # =================================================================
+    # SIGNAL 5: Salary level (weight 2) — SGD/month
+    # =================================================================
+    # Try to extract salary from salary field or description
+    salary_num = 0
+    
+    # Check salary field first
+    if sal_lower:
+        sal_match = re.search(r'(?:sgd|s\$|£)?\s*(\d+(?:,\d+)?)', sal_lower)
+        if sal_match:
+            try:
+                salary_num = int(sal_match.group(1).replace(',', ''))
+            except:
+                pass
+    
+    # If no explicit salary, try description
+    if salary_num == 0:
+        sal_patterns = [
+            r'(?:sgd|s\$|salary)?\s*(\d+(?:,\d+)?)\s*(?:per\s+month|\/month|monthly)',
+            r'(?:sgd|s\$)\s*(\d+(?:,\d+)?)',
+        ]
+        for pattern in sal_patterns:
+            sal_match = re.search(pattern, desc_lower)
+            if sal_match:
+                try:
+                    salary_num = int(sal_match.group(1).replace(',', ''))
+                    break
+                except:
+                    pass
+    
+    # Map salary to seniority signal
+    if salary_num >= 15000:
+        seniority_signals += 3  # Senior+ (Rajesh's target minimum is 13K)
+    elif salary_num >= 13000:
+        seniority_signals += 2  # Senior level
+    elif salary_num >= 10000:
+        seniority_signals += 1  # Mid-senior
+    # Below 10K = no bonus
+    
+    # =================================================================
+    # SIGNAL 6: Negative signals (reduce seniority)
+    # =================================================================
+    negative_keywords = [
+        r'\b(junior|jr\.?|entry[\s-]?level|entry-level|graduate|intern|trainee)\b',
+        r'\b(fresh|new\s+to|learn.*and\s+grow|early[\s-]?career)\b',
+    ]
+    for pattern in negative_keywords:
+        if re.search(pattern, title_lower):
+            return "Junior"  # Explicit junior indicator
+        if re.search(pattern, desc_lower):
+            seniority_signals = max(0, seniority_signals - 2)
+    
+    # =================================================================
+    # FINAL DECISION: Map signals to seniority level
+    # =================================================================
+    if re.search(r'\b(manager|supervisor)\b', title_lower):
+        if seniority_signals >= 3:
+            return "Senior"
+        else:
+            return "Manager"
+    
+    # Based on total signals
+    if seniority_signals >= 6:
         return "Senior"
-    if re.search(r'\b(manager|supervisor)\b', text):
-        return "Manager"
-    if re.search(r'\b(junior|jr\.?|entry|intern|trainee|graduate)\b', text):
+    elif seniority_signals >= 4:
+        return "Senior"  # Borderline senior
+    elif seniority_signals >= 2:
+        return "Mid"
+    elif seniority_signals >= 1:
+        return "Mid"
+    else:
         return "Junior"
 
-    return "Mid"
-
 
 # ==========================================================================
-# SALARY ESTIMATION — multi-signal model for HK market
+# SALARY ESTIMATION — multi-signal model for Singapore market
 # ==========================================================================
-# Calibrated from verified sources (March 2026):
-#   - JobsDB HK salary pages (hk.jobsdb.com/career-advice/role/*/salary)
-#   - FastLane HR 2025 HK salary benchmarks
-#   - HK Census & Statistics Dept median wages (May-Jun 2025: HK$21,200)
-# All values in HKD/month.
+# Calibrated from verified sources (April 2026):
+#   - SG PayScale salary data (payscale.com/research/SG/)
+#   - Robert Half Singapore Salary Guide 2026
+#   - Glassdoor SG average salaries
+# All values in SGD/month.
+#
+# NOTE: Rajesh's minimum expectation is SGD 13,000/month
+# (Currently earning SGD 15,000)
 
-# Base salary by seniority — calibrated from JobsDB percentiles + FastLane HR
-# Junior ≈ P10-P25 of JobsDB data, Mid ≈ median, Senior ≈ P75-P90
+# Base salary by seniority — calibrated from SG market data
+# Junior ≈ SGD 3,500-4,500, Mid ≈ SGD 5,500-7,500,
+# Senior ≈ SGD 8,500-12,000, Manager ≈ SGD 12,000-18,000,
+# Director+ ≈ SGD 18,000-30,000+
 SENIORITY_BASE = {
-    "Junior":    18000,   # JobsDB P10~15K, P25~25K; FastLane entry 15-25K → midpoint
-    "Mid":       30000,   # JobsDB median across analyst/dev/engineer roles: 27.5-33.5K
-    "Senior":    45000,   # JobsDB P90 ~45K; FastLane senior 55-90K → lower bound
-    "Manager":   65000,   # FastLane senior/manager 55-80K (finance), 60-90K (IT)
-    "Director+": 95000,   # FastLane/Robert Half director+ range
+    "Junior":    4000,     # SGD 3,500-4,500
+    "Mid":       6500,     # SGD 5,500-7,500 (analyst base)
+    "Senior":    10500,    # SGD 8,500-12,000 (senior analyst/specialist)
+    "Manager":   15000,    # SGD 12,000-18,000 (manager track)
+    "Director+": 25000,    # SGD 18,000-30,000+
 }
 
-# Category multiplier — based on JobsDB median differences between roles
-# Data Analyst median: HK$30,500 (baseline = 1.0)
-# Developer median: HK$33,500 → 1.10x
-# Software Engineer median: HK$27,500 → 0.90x
-# Business Analyst median: HK$30,250 → 1.0x
-# Analyst (general) median: HK$30,000 → 1.0x
+# Category multiplier — based on SG market role premiums
+# Fraud/Risk roles command 15-20% premium in SG due to regulatory demand
+# Data roles = baseline
 CATEGORY_MULTIPLIER = {
-    "Data Analyst":           1.00,   # JobsDB: HK$30,500 median
-    "Business Intelligence":  1.05,   # Slightly above analyst (BI tools premium)
-    "Fraud & Risk Analyst":   1.10,   # Compliance/AML roles pay premium in HK
-    "Analytics Manager":      1.05,   # Management track
-    "Web Developer":          0.95,   # PHP/WordPress slightly below market
-    "Full Stack Developer":   1.10,   # JobsDB developer median HK$33,500
-    "SEO & Digital Marketing": 0.85,  # Marketing roles below tech
-    "Data Engineer":          1.15,   # Pipeline/infra skills premium
-    "Product Analyst":        1.00,   # Similar to data analyst
-    "Python & Automation":    1.05,   # Python premium
-    "AI & Data Science":      1.20,   # ML/AI commands highest premium
-    "Fintech":                1.15,   # Finance + tech intersection
+    "Fraud Investigator":     1.20,   # High regulatory demand in SG
+    "Fraud Analyst":          1.15,   # Compliance-heavy, premium role
+    "Risk Analyst":           1.15,   # Financial risk premium
+    "Risk Manager":           1.20,   # Management track + compliance
+    "Senior Data Analyst":    1.00,   # Baseline analyst role
+    "Business Analyst":       0.95,   # Slightly below senior analyst
+    "Financial Analyst":      1.10,   # Finance/fraud combo
+    "Program Manager":        1.05,   # Management role
+    "Product Manager":        1.08,   # Tech-heavy, slight premium
+    "Project Manager":        1.00,   # Baseline PM
+    "Compliance Analyst":     1.10,   # Regulatory premium
+    "Data Engineer":          1.25,   # Technical infrastructure premium in SG
 }
 
-# Company tier — premium/discount based on publicly known compensation bands
+# Company tier — premium/discount based on publicly known SG compensation
 COMPANY_TIER = {
-    # Tier 1: +25% (global banks, FAANG — well-documented HK premiums)
-    "hsbc": 1.25, "standard chartered": 1.25, "jp morgan": 1.25, "jpmorgan": 1.25,
-    "goldman sachs": 1.25, "morgan stanley": 1.25, "ubs": 1.25, "citibank": 1.25,
-    "citi": 1.25, "google": 1.30, "meta": 1.30, "microsoft": 1.25, "amazon": 1.25,
-    "apple": 1.30,
-    # Tier 2: +15% (crypto exchanges, Big4, major tech)
-    "binance": 1.15, "okx": 1.15, "bybit": 1.15, "crypto.com": 1.15,
-    "deloitte": 1.15, "pwc": 1.15, "ey": 1.15, "kpmg": 1.15,
-    "alibaba": 1.15, "tencent": 1.15, "bytedance": 1.20,
-    "revolut": 1.10, "wise": 1.10, "stripe": 1.20, "airwallex": 1.10,
-    # Tier 3: baseline (known companies)
-    "lalamove": 1.0, "klook": 1.0, "agoda": 1.05, "animoca": 1.0,
+    # Tier 1: +30% (major banks, FAANG — documented SG premiums)
+    "hsbc": 1.30, "standard chartered": 1.30, "dbs": 1.25,
+    "jp morgan": 1.30, "jpmorgan": 1.30, "citi": 1.30,
+    "google": 1.35, "meta": 1.35, "microsoft": 1.30,
+    "amazon": 1.30, "apple": 1.35,
+    # Tier 2: +20% (Big4, major consulting, SG fintech)
+    "deloitte": 1.20, "pwc": 1.20, "ey": 1.20, "kpmg": 1.20,
+    "mckinsey": 1.25, "bcg": 1.25, "bain": 1.20,
+    "stripe": 1.25, "airwallex": 1.20, "wise": 1.15,
+    "grab": 1.15, "shopee": 1.15, "sea group": 1.15,
+    # Tier 3: +10% (known SG companies)
+    "oracle": 1.10, "salesforce": 1.10, "sap": 1.10,
+    "binance": 1.15, "crypto.com": 1.10,
+    # Baseline (regional/unknown)
 }
 
 # Skill premium keywords — capped at +15% total
@@ -322,8 +503,8 @@ PREMIUM_SKILLS = {
 
 
 def estimate_salary(seniority: str, company: str, category_label: str,
-                    description: str, ttps: bool) -> dict:
-    """Estimate monthly HKD salary when not disclosed.
+                    description: str, ep_friendly: bool) -> dict:
+    """Estimate monthly SGD salary when not disclosed.
     Returns {"estimate": int, "confidence": str, "basis": str}."""
 
     # Step 1: Seniority base
@@ -340,8 +521,8 @@ def estimate_salary(seniority: str, company: str, category_label: str,
             comp_mult = mult
             break
 
-    # Step 4: TTPS premium (international-hiring companies tend to pay more)
-    ttps_mult = 1.05 if ttps and comp_mult == 1.0 else 1.0
+    # Step 4: EP premium (Employment Pass companies tend to pay more)
+    ep_mult = 1.05 if ep_friendly and comp_mult == 1.0 else 1.0
 
     # Step 5: Skill premiums from description
     desc_lower = str(description or "").lower()
@@ -352,10 +533,10 @@ def estimate_salary(seniority: str, company: str, category_label: str,
     skill_mult = 1.0 + min(skill_bonus, 0.15)  # Cap at +15%
 
     # Combine
-    estimate = int(base * cat_mult * comp_mult * ttps_mult * skill_mult)
+    estimate = int(base * cat_mult * comp_mult * ep_mult * skill_mult)
 
-    # Round to nearest 1,000
-    estimate = round(estimate / 1000) * 1000
+    # Round to nearest 500
+    estimate = round(estimate / 500) * 500
 
     # Confidence based on how many signals contributed
     signals = sum([
@@ -433,23 +614,25 @@ async def scrape_category(category_slug: str, location: str, pages: int = 2):
 # ==========================================================================
 # Maps category label → title keywords that indicate strong relevance
 CATEGORY_TITLE_KEYWORDS = {
-    "Data Analyst":           ["data analyst", "reporting analyst", "business analyst"],
-    "Business Intelligence":  ["power bi", "bi analyst", "business intelligence", "bi developer", "bi engineer"],
-    "Fraud & Risk Analyst":   ["fraud", "risk analyst", "aml", "compliance", "kyc", "financial crime"],
-    "Analytics Manager":      ["analytics manager", "head of analytics", "analytics lead", "analytics director"],
-    "Web Developer":          ["web developer", "php developer", "wordpress", "frontend developer", "web engineer"],
-    "Full Stack Developer":   ["full stack", "fullstack", "javascript developer", "frontend", "backend developer"],
-    "SEO & Digital Marketing": ["seo", "digital marketing", "search engine", "content marketing", "sem"],
-    "Data Engineer":          ["data engineer", "analytics engineer", "data pipeline", "etl", "data infrastructure"],
-    "Product Analyst":        ["product analyst", "growth analyst", "insights analyst", "product data"],
-    "Python & Automation":    ["python developer", "python engineer", "automation", "scripting", "python analyst"],
-    "AI & Data Science":      ["data scientist", "machine learning", "ai engineer", "ai analyst", "ml engineer", "nlp"],
-    "Fintech":                ["fintech", "blockchain", "crypto", "defi", "web3", "trading"],
+    "Fraud Investigator":     ["avp fraud investigator", "vp fraud", "senior fraud investigator", "lead fraud investigator", "fraud investigator", "financial crime investigator"],
+    "Fraud Analyst":          ["avp fraud analyst", "vp fraud analyst", "senior fraud analyst", "lead fraud analyst", "fraud analyst", "fraud detection analyst"],
+    "Risk Analyst":           ["avp risk", "vp risk analyst", "senior risk analyst", "lead risk analyst", "risk analyst", "credit risk analyst"],
+    "Risk Manager":           ["avp risk manager", "vp risk", "senior risk manager", "lead risk manager", "risk manager", "head of risk"],
+    "Senior Data Analyst":    ["avp data", "vp analytics", "senior data analyst", "lead data analyst", "data analyst lead"],
+    "Business Analyst":       ["avp business", "vp business analyst", "senior business analyst", "lead business analyst", "business analyst", "business analysis"],
+    "Financial Analyst":      ["avp financial", "vp financial analyst", "senior financial analyst", "lead financial analyst", "financial analyst", "financial crime analyst"],
+    "Program Manager":        ["avp program", "vp program", "senior program manager", "lead program manager", "program manager", "programme manager"],
+    "Product Manager":        ["avp product", "vp product", "senior product manager", "lead product manager", "product manager"],
+    "Project Manager":        ["avp project", "vp project", "senior project manager", "lead project manager", "project manager", "project lead"],
+    "Compliance Analyst":     ["avp compliance", "vp compliance", "senior compliance analyst", "lead compliance analyst", "compliance analyst", "aml analyst"],
+    "Data Engineer":          ["avp engineering", "vp engineering", "senior data engineer", "lead data engineer", "data engineer", "analytics engineer"],
 }
 
 
-def calc_category_relevance(title: str, description: str, category_label: str) -> int:
-    """Score 0-100: how relevant is this job to the selected category."""
+def calc_category_relevance(title: str, description: str, category_label: str, salary: str = "") -> int:
+    """Score 0-100: how relevant is this job to the selected category.
+    Rajesh targets SENIOR-level roles across all categories.
+    Uses enhanced multi-signal seniority detection (title, experience, responsibility, scope, salary)."""
     keywords = CATEGORY_TITLE_KEYWORDS.get(category_label, [])
     if not keywords:
         return 0
@@ -468,14 +651,37 @@ def calc_category_relevance(title: str, description: str, category_label: str) -
     desc_hits = sum(1 for kw in keywords if kw in desc_lower)
     desc_score = min(40, desc_hits * 15)
 
-    return min(100, title_score + desc_score)
+    base_score = min(100, title_score + desc_score)
+
+    # SENIORITY BOOST — Rajesh targets Senior/Lead roles across all categories
+    # Use enhanced seniority detection that considers:
+    # - Title keywords (senior, lead, principal, director)
+    # - Years of experience (6+, 8+)
+    # - Responsibility keywords (lead, drive, strategic, mentor)
+    # - Scope keywords (global, enterprise, cross-functional)
+    # - Salary level (13K+ SGD = senior)
+    detected_seniority = detect_seniority(title, description, salary)
+    
+    seniority_bonus = 0
+    if detected_seniority == "Director+":
+        seniority_bonus = 18  # Highest priority
+    elif detected_seniority == "Senior":
+        seniority_bonus = 15  # Target level
+    elif detected_seniority == "Manager":
+        seniority_bonus = 12  # Good (manager-level responsibility)
+    elif detected_seniority == "Mid":
+        seniority_bonus = 5   # Borderline
+    else:  # Junior
+        seniority_bonus = -10  # Penalize junior roles
+
+    return min(100, max(0, base_score + seniority_bonus))
 
 
 # ==========================================================================
 # BUILD JSON
 # ==========================================================================
 def build_json(listings, query_label, location):
-    """Convert listings to JSON with skill match + TTPS scoring."""
+    """Convert listings to JSON with skill match + EP sponsorship scoring."""
     jobs = []
     all_hard = []
     all_soft = []
@@ -489,16 +695,20 @@ def build_json(listings, query_label, location):
     median_sal = int(sorted(sal_values)[len(sal_values) // 2]) if sal_values else 0
 
     for l in listings:
-        mandarin = detect_mandarin(l.description)
+        # Skip Mandarin detection — not relevant for Rajesh (non-Mandarin speaker)
+        # mandarin = detect_mandarin(l.description)
+        mandarin = ""
+        
         skills = extract_keywords(l.description, True)
         soft = [kw for kw in SOFT_SKILLS if re.search(rf'\b{re.escape(kw)}\b', str(l.description or "").lower())]
         ms = extract_max_salary(l.salary)
         match_score = calc_skill_match(l.title, l.description, skills)
-        relevance = calc_category_relevance(l.title, l.description, query_label)
-        ttps = detect_ttps_friendly(l.description, l.company)
+        relevance = calc_category_relevance(l.title, l.description, query_label, l.salary)
+        ep_friendly = detect_ep_friendly(l.description, l.company)
         # Use work_mode from scraper if available, otherwise detect from description
         work_mode = l.work_mode if l.work_mode else detect_work_mode(l.description, l.job_type)
-        seniority = detect_seniority(l.title, l.description)
+        # Detect seniority with salary signal
+        seniority = detect_seniority(l.title, l.description, l.salary)
 
         all_hard.extend(skills)
         all_soft.extend(soft)
@@ -511,8 +721,8 @@ def build_json(listings, query_label, location):
         sal_confidence = ""
         sal_basis = ""
         if not sal_display or "negotiable" in sal_display.lower() or "competitive" in sal_display.lower():
-            est = estimate_salary(seniority, company, query_label, l.description, ttps)
-            sal_display = f"~HK${est['estimate']:,}"
+            est = estimate_salary(seniority, company, query_label, l.description, ep_friendly)
+            sal_display = f"~SGD {est['estimate']:,}"
             sal_est = est["estimate"]
             sal_confidence = est["confidence"]
             sal_basis = est["basis"]
@@ -534,24 +744,25 @@ def build_json(listings, query_label, location):
             "url": l.url or "",
             "match": match_score,
             "relevance": relevance,
-            "ttps": ttps,
+            "ep_friendly": ep_friendly,
             "work_mode": work_mode,
             "seniority": seniority,
         })
 
-    # Salary brackets (HKD monthly) — includes estimates for chart usefulness
+    # Salary brackets (SGD monthly) — includes estimates for chart usefulness
+    # Rajesh's minimum: SGD 13,000
     brackets = {
-        "<HK$15K": 0, "HK$15-25K": 0, "HK$25-35K": 0,
-        "HK$35-50K": 0, "HK$50-80K": 0, "HK$80K+": 0,
+        "<SGD 8K": 0, "SGD 8-12K": 0, "SGD 12-16K": 0,
+        "SGD 16-20K": 0, "SGD 20-30K": 0, "SGD 30K+": 0,
     }
     all_sal_for_brackets = [j["salary_num"] for j in jobs if j["salary_num"] > 0]
     for s in all_sal_for_brackets:
-        if s < 15000: brackets["<HK$15K"] += 1
-        elif s < 25001: brackets["HK$15-25K"] += 1
-        elif s < 35001: brackets["HK$25-35K"] += 1
-        elif s < 50001: brackets["HK$35-50K"] += 1
-        elif s < 80001: brackets["HK$50-80K"] += 1
-        else: brackets["HK$80K+"] += 1
+        if s < 8000: brackets["<SGD 8K"] += 1
+        elif s < 12001: brackets["SGD 8-12K"] += 1
+        elif s < 16001: brackets["SGD 12-16K"] += 1
+        elif s < 20001: brackets["SGD 16-20K"] += 1
+        elif s < 30001: brackets["SGD 20-30K"] += 1
+        else: brackets["SGD 30K+"] += 1
 
     # Median now uses real + estimated
     all_sal_nums = sorted([j["salary_num"] for j in jobs if j["salary_num"] > 0])
@@ -566,7 +777,6 @@ def build_json(listings, query_label, location):
         if not j["skills"] and top3_skills:
             j["skills"] = top3_skills
 
-    mand_breakdown = Counter(j["mandarin"] for j in jobs if j["mandarin"])
     company_counts = Counter(j["company"] for j in jobs if j["company"] != "Confidential")
 
     # Sort by category relevance first, then match score as tiebreaker
@@ -584,17 +794,16 @@ def build_json(listings, query_label, location):
             "total_jobs": len(jobs),
             "total_companies": len(set(j["company"] for j in jobs)),
             "salary_median": median_sal,
-            "mandarin_total": sum(1 for j in jobs if j["mandarin"]),
+            "salary_minimum_target": 13000,  # Rajesh's minimum expectation
             "with_salary": len(sal_values),
             "with_estimate": est_count,
-            "ttps_friendly": sum(1 for j in jobs if j["ttps"]),
+            "ep_friendly": sum(1 for j in jobs if j["ep_friendly"]),
             "avg_match": int(sum(j["match"] for j in jobs) / len(jobs)) if jobs else 0,
         },
         "charts": {
             "salary_brackets": brackets,
             "top_skills": [{"skill": k, "count": c} for k, c in hard_counts],
             "soft_skills": [{"skill": k, "count": c} for k, c in soft_counts],
-            "mandarin_levels": dict(mand_breakdown),
             "top_companies": [{"name": k, "count": c} for k, c in company_counts.most_common(10)],
         },
         "jobs": jobs,

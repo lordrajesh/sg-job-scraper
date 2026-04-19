@@ -1,8 +1,8 @@
-# HK Job Market Intelligence
+# Singapore Job Market Intelligence
 
-Real-time Hong Kong job market dashboard aggregating 1,000+ listings from 7 sources with salary estimation, skill matching, and market analytics.
+Real-time Singapore job market dashboard aggregating 1,000+ listings from 7 sources with salary estimation, skill matching, and market analytics. Optimized for fraud/risk/analytics roles and Employment Pass eligible candidates.
 
-**Live:** [climbthesearches.com/hk-jobs](https://climbthesearches.com/hk-jobs/)
+**Targeted for:** Rajesh Rajagopalan — Senior Data Analyst, Fraud/Risk Analyst, Business Analyst roles (SGD 13,000+ minimum salary expectation)
 
 ![Dashboard Screenshot](docs/screenshot.png)
 
@@ -34,12 +34,11 @@ Agoda ───┤ Greenhouse API
 ## Features
 
 - **7 data sources** — LinkedIn, Indeed, Google Jobs (via JobSpy), JobsDB (reverse-engineered GraphQL), Lever API, Greenhouse API
-- **Salary estimation engine** — Multi-signal model calibrated from [JobsDB](https://hk.jobsdb.com/career-advice/role/data-analyst/salary), [FastLane HR](https://fastlanehr.hk/average-salary-in-hong-kong/), and [Robert Half](https://www.roberthalf.com/hk/en/insights/salary-guide) March 2026 data. Uses seniority, company tier, role type, TTPS status, and premium skill keywords.
-- **Skill matching** — Each job scored 0-100% against a configurable skill profile (Power BI, SQL, Python, fraud, SEO)
-- **TTPS-Friendly detection** — Flags 60+ known international-hiring companies and visa sponsorship signals
-- **Category relevance** — 12 targeted categories with title-based relevance scoring so each category shows distinct results
+- **Salary estimation engine** — Multi-signal model calibrated from [JobsDB Singapore](https://sg.jobsdb.com/), [PayScale Singapore](https://www.payscale.com/research/SG/), and [Robert Half Singapore 2026](https://www.roberthalf.com/sg/en/insights/salary-guide). Uses seniority, company tier, role type, EP eligibility, and premium skill keywords.
+- **Skill matching** — Each job scored 0-100% against a configurable skill profile (SQL, Power BI, Tableau, Python, Microsoft Azure, Scikit-Learn, XGBoost)
+- **Employment Pass-Friendly detection** — Flags 50+ known international-hiring companies and visa sponsorship signals relevant to Singapore
+- **Category relevance** — 12 targeted categories (Fraud Investigator, Risk Analyst, Senior Data Analyst, Business Analyst, Product/Program/Project Manager, etc.) with title-based relevance scoring
 - **3-layer deduplication** — URL canonicalization + exact title/company + fuzzy matching (70% threshold)
-- **HK tax calculator** — 2025/26 IRD rates with MPF, progressive bands, and standard rate comparison
 - **134 unit tests** — Model validation, dedup logic, scoring algorithms
 
 ## Tech Stack
@@ -64,13 +63,13 @@ cd frontend && npm install && cd ..
 python generate_data.py --force
 
 # Single category test
-python generate_data.py --query "data analyst" --location "Hong Kong" --force
+python generate_data.py --query "fraud analyst" --location "Singapore" --force
 
 # Run tests
 python -m pytest tests/ -v
 
 # Frontend dev server
-cd frontend && npm run dev    # http://localhost:4321/hk-jobs/
+cd frontend && npm run dev    # http://localhost:4321/sg-jobs/
 
 # Production build + deploy
 cd frontend && npm run build && cd ..
@@ -82,23 +81,25 @@ python deploy.py
 | Source | Method | Jobs | Auth |
 |--------|--------|------|------|
 | LinkedIn | JobSpy wrapper | ~75/query | None |
-| Indeed HK | JobSpy wrapper | ~25/query | None |
+| Indeed SG | JobSpy wrapper | ~25/query | None |
 | Google Jobs | JobSpy wrapper | varies | None |
-| JobsDB | Reverse-engineered GraphQL | ~250/batch | None |
-| Binance, Animoca | Lever API | 138 HK | None |
-| OKX, Agoda | Greenhouse API | 131 HK | None |
+| JobsDB | Reverse-engineered GraphQL | ~200/batch | None |
+| Tech/Finance Companies | Lever API | ~100 SG | None |
+| Finance/Tech Companies | Greenhouse API | ~80 SG | None |
 
 ## Salary Estimation
 
-HK employers rarely publish salary. The estimation engine uses 5 signals:
+Singapore employers sometimes publish salary ranges. When not disclosed, the estimation engine uses 5 signals calibrated to SGD/month:
 
-1. **Seniority** (Junior: HK$18K → Director+: HK$95K) — calibrated from JobsDB percentiles
-2. **Company tier** — FAANG/banks +25%, crypto exchanges +15%, Big4 +15%
-3. **Role category** — AI/ML +20%, Data Engineer +15%, SEO -15%
-4. **TTPS status** — International-hiring companies +5%
-5. **Premium skills** — ML, blockchain, quantitative: up to +15%
+1. **Seniority** (Junior: SGD 4K → Director+: SGD 25K) — calibrated from Singapore market data
+2. **Company tier** — FAANG/banks +30%, Big4 +20%, known SG companies +10%
+3. **Role category** — Fraud/Risk roles +15-20%, Data Engineer +25%, PM roles baseline
+4. **Employment Pass status** — EP-eligible companies +5%
+5. **Premium skills** — ML, Cloud, Compliance: up to +15%
 
 Confidence: High (3+ signals), Medium (1-2), Low (baseline only).
+
+**Minimum salary target:** SGD 13,000/month (Rajesh's current: SGD 15,000)
 
 ## Project Structure
 
@@ -119,8 +120,6 @@ hk-job-scraper/
 
 ## Author
 
-**Irmin Corona** — Senior Data Analyst | 7 years at Microsoft & Stellantis | TTPS Visa Holder
+**Rajesh Rajagopalan** — Senior Data Analyst | Fraud & Risk Analysis | Stripe & Microsoft | Singapore
 
-- [LinkedIn](https://linkedin.com/in/irmin-corona)
-- [GitHub](https://github.com/ircorona)
-- [Portfolio](https://climbthesearches.com)
+- [LinkedIn](https://linkedin.com/in/rajesh-rajagopalan-72b696b9)

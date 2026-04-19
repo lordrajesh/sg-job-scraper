@@ -7,7 +7,7 @@ Automated resume tailoring pipeline: job posting → tailored resume → outreac
 ```
 resume/
 ├── master/           # Master resume (YAML source + PDF)
-│   └── irmin_corona_cv.yaml   ← upload here when ready
+│   └── rajesh_rajagopalan_cv.yaml   ← upload here when ready
 ├── tailored/         # Job-specific versions (auto-generated)
 │   └── {company}_{role}_{date}/
 │       ├── resume.yaml
@@ -32,6 +32,6 @@ resume/
 
 - Write resume as YAML → render to PDF with professional typography
 - Install: `pip install "rendercv[full]"` (requires Python 3.12+)
-- Create: `rendercv new "Irmin Corona"`
-- Render: `rendercv render irmin_corona_cv.yaml`
+- Create: `rendercv new "Rajesh Rajagopalan"`
+- Render: `rendercv render rajesh_rajagopalan_cv.yaml`
 - Themes: classic, moderncv, engineeringresumes, sb2nov, harvard, opal, ember
