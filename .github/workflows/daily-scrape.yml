@@ -57,4 +57,3 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           working-directory: ./frontend
           production: true
-          echo "Done — public files deployed"
