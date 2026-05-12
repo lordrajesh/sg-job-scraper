@@ -125,7 +125,7 @@ HUNTER_API_KEY=your_key_here
 HOSTINGER_FTP_HOST=your.hostinger.com
 HOSTINGER_FTP_USER=your_username
 HOSTINGER_FTP_PASS=your_password
-HOSTINGER_FTP_DIR=/public_html/hk-jobs/
+HOSTINGER_FTP_DIR=/public_html/sg-jobs/
 ```
 
 ### GitHub Secrets (For GitHub Actions)

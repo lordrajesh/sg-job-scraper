@@ -79,7 +79,7 @@ def generate_excel(input_csv, output_path=None, merged_pairs=None, top_companies
     print(f"  Loaded {len(df)} listings")
 
     if output_path is None:
-        output_path = os.path.join("output", f"hk_job_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx")
+        output_path = os.path.join("output", f"sg_job_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx")
 
     df["_max_sal"] = df["salary"].apply(extract_max_salary)
     df["_mandarin"] = df["description"].apply(detect_mandarin)

@@ -1,7 +1,7 @@
 """Deploy frontend/dist/ to Hostinger via FTP.
 
 Usage:
-    python deploy.py              # deploy dist/ to /hk-jobs/
+    python deploy.py              # deploy dist/ to /sg-jobs/
     python deploy.py --dry-run    # list files without uploading
 """
 
@@ -18,7 +18,7 @@ load_dotenv()
 FTP_HOST = os.getenv("FTP_HOST")
 FTP_USER = os.getenv("FTP_USER")
 FTP_PASS = os.getenv("FTP_PASS")
-REMOTE_BASE = "/hk-jobs"
+REMOTE_BASE = "/sg-jobs"
 LOCAL_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "frontend", "dist")
 
 
@@ -83,7 +83,7 @@ def deploy(dry_run: bool = False):
 
     ftp.quit()
     print(f"\nDone! {uploaded} files deployed to {FTP_HOST}:{REMOTE_BASE}/")
-    print(f"Live at: https://climbthesearches.com/hk-jobs/")
+    print(f"Live at: https://sg-job-scraper.vercel.app/")
 
 
 if __name__ == "__main__":

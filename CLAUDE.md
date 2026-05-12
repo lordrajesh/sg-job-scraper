@@ -85,7 +85,7 @@ cd frontend && npm run dev    # http://localhost:4321/sg-jobs/
 # Production build
 cd frontend && npm run build && cd ..
 ```
-cd frontend && npm run dev                  # local: http://localhost:4321/hk-jobs/
+cd frontend && npm run dev                  # local: http://localhost:4321/
 cd frontend && npm run build                # production build → dist/
 ```
 

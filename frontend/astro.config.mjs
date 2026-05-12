@@ -6,7 +6,7 @@ export default defineConfig({
     tailwind({ applyBaseStyles: false }),
   ],
   output: 'static',
-  base: '/hk-jobs',
+  base: '/',
   build: {
     assets: '_assets',
   },
