@@ -47,7 +47,9 @@ jobs:
 
       - name: Build Astro frontend
         working-directory: ./frontend
-        run: npm run build
+        run: npm run build --verbose
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
 
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
